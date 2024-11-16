@@ -296,6 +296,14 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
+    // Функция для сброса цвета фона
+    function resetBackgrounds(...fields) {
+        fields.forEach(field => {
+            field.style.backgroundColor = "";
+            field.style.color = "";
+        });
+    }
+
     calculateButton.addEventListener('click', () => {
         const speedUnit = document.getElementById('speed_unit').value.toLowerCase(); // kts или mps
         const toLimitField = document.getElementById('to_limit');
@@ -383,6 +391,41 @@ document.addEventListener('DOMContentLoaded', () => {
         // Устанавливаем значения
         longitudinalComponentField.value = longitudinalText;
         lateralComponentField.value = lateralText;
+
+        // Сброс цветов фона
+        resetBackgrounds(toLimitField, ldgLimitField);
+
+        // Извлекаем боковую составляющую ветра
+        const lateralComponentText = lateralComponentField.value;
+        const lateralComponentValue = parseFloat(lateralComponentText.match(/[\d.]+/)) || 0;
+
+        // Получаем ограничения из полей
+        const toLimitText = toLimitField.value;
+        const ldgLimitText = ldgLimitField.value;
+
+        const toFullLimit = parseFloat(toLimitText.split(" / ")[0]) || 0;
+        const toHalfLimit = parseFloat(toLimitText.split(" / ")[1]) || 0;
+
+        const ldgFullLimit = parseFloat(ldgLimitText.split(" / ")[0]) || 0;
+        const ldgHalfLimit = parseFloat(ldgLimitText.split(" / ")[1]) || 0;
+
+        // Проверяем боковую составляющую против взлетных ограничений
+        if (lateralComponentValue >= toHalfLimit && lateralComponentValue < toFullLimit) {
+            toLimitField.style.backgroundColor = "orange";
+            toLimitField.style.color = "black";
+        } else if (lateralComponentValue >= toFullLimit) {
+            toLimitField.style.backgroundColor = "red";
+            toLimitField.style.color = "white";
+        }
+
+        // Проверяем боковую составляющую против посадочных ограничений
+        if (lateralComponentValue >= ldgHalfLimit && lateralComponentValue < ldgFullLimit) {
+            ldgLimitField.style.backgroundColor = "orange";
+            ldgLimitField.style.color = "black";
+        } else if (lateralComponentValue >= ldgFullLimit) {
+            ldgLimitField.style.backgroundColor = "red";
+            ldgLimitField.style.color = "white";
+        }
     });
 
     // Загрузка данных при старте
