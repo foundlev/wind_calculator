@@ -224,12 +224,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Обработка кнопки "Вычислить"
-    calculateButton.addEventListener('click', () => {
-        // Здесь будет логика вычислений
-        alert('Вычисление выполнено!');
-    });
-
     // Переключение между состоянием ВПП и коэф. сцепления
     const toggleButton = document.getElementById('toggle_button');
     const stateField = document.getElementById('runway_condition').parentElement;
@@ -300,6 +294,66 @@ document.addEventListener('DOMContentLoaded', () => {
             input.value = padValue(currentValue, maxLength);
             saveData(fieldId, input.value);
         });
+    });
+
+    calculateButton.addEventListener('click', () => {
+        const speedUnit = document.getElementById('speed_unit').value.toLowerCase(); // kts или mps
+        const toLimitField = document.getElementById('to_limit');
+        const ldgLimitField = document.getElementById('ldg_limit');
+
+        const runwayConditionField = document.getElementById('runway_condition');
+        const coeffMode = document.getElementById('coeff-mode');
+        const frictionCoeffField = document.getElementById('friction_coeff');
+        const measureTypeField = document.getElementById('measure_type');
+
+        // Проверяем, какое поле активно: состояние ВПП или коэффициент сцепления
+        if (!coeffMode.classList.contains('hidden')) {
+            // Берем значение состояния ВПП
+            const runwayCondition = runwayConditionField.value.toLowerCase();
+
+            // Получаем ограничения из reportedBrakingActions
+            const takeoffLimits = reportedBrakingActions["takeoff"][runwayCondition];
+            const landingLimits = reportedBrakingActions["landing"][runwayCondition];
+
+            // Форматируем и выводим значения
+            const toLimitValue = speedUnit === "mps" ? takeoffLimits["mps"] : takeoffLimits["kts"];
+            const toHalfValue = Math.round((toLimitValue / 2) * 10 - 1) / 10; // Округляем до 1 знака
+            toLimitField.value = `${toLimitValue} / ${toHalfValue} ${speedUnit.toUpperCase()}`;
+
+            const ldgLimitValue = speedUnit === "mps" ? landingLimits["mps"] : landingLimits["kts"];
+            const ldgHalfValue = Math.round((ldgLimitValue / 2) * 10 - 1) / 10; // Округляем до 1 знака
+            ldgLimitField.value = `${ldgLimitValue} / ${ldgHalfValue} ${speedUnit.toUpperCase()}`;
+        } else if (!frictionCoeffField.classList.contains('hidden')) {
+            // Берем коэффициент сцепления и тип измерения
+            const frictionCoeff = parseFloat(frictionCoeffField.value) / 100; // Переводим в десятичное число
+            const measureType = measureTypeField.value.toLowerCase(); // normative или by_sft
+
+            // Получаем соответствующий ключ коэффициента
+            const brakingActions = coefficientBrakingActions[measureType];
+            const takeoffKeys = Object.keys(brakingActions["takeoff"]).map(parseFloat).sort((a, b) => b - a);
+            const landingKeys = Object.keys(brakingActions["landing"]).map(parseFloat).sort((a, b) => b - a);
+
+            const getLimit = (keys, coeff, limits) => {
+                for (const key of keys) {
+                    if (coeff >= key) {
+                        return limits[key];
+                    }
+                }
+                return { kts: 0, mps: 0 }; // Если коэффициент меньше минимального
+            };
+
+            const takeoffLimit = getLimit(takeoffKeys, frictionCoeff, brakingActions["takeoff"]);
+            const landingLimit = getLimit(landingKeys, frictionCoeff, brakingActions["landing"]);
+
+            // Форматируем и выводим значения
+            const toLimitValue = speedUnit === "mps" ? takeoffLimit["mps"] : takeoffLimit["kts"];
+            const toHalfValue = Math.round((toLimitValue / 2) * 10 - 1) / 10; // Округляем до 1 знака
+            toLimitField.value = `${toLimitValue} / ${toHalfValue} ${speedUnit.toUpperCase()}`;
+
+            const ldgLimitValue = speedUnit === "mps" ? landingLimit["mps"] : landingLimit["kts"];
+            const ldgHalfValue = Math.round((ldgLimitValue / 2) * 10 - 1) / 10; // Округляем до 1 знака
+            ldgLimitField.value = `${ldgLimitValue} / ${ldgHalfValue} ${speedUnit.toUpperCase()}`;
+        }
     });
 
     // Загрузка данных при старте
