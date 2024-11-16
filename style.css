@@ -1,0 +1,288 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: sans-serif;
+    overflow: hidden;
+    background-color: #f9f9f9;
+    color: #333;
+}
+
+.container {
+    display: flex;
+    height: 100vh;
+    width: 100vw;
+}
+
+.left {
+    flex: 2;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+}
+
+.right {
+    flex: 1;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.section {
+    display: flex;
+    flex-direction: column;
+}
+
+.section-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.field {
+    flex: 1;
+    margin: 5px;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    position: relative;
+}
+
+.field-runway-condition {
+    flex: 1.5;
+}
+
+.button-field {
+    flex: 0.3;
+}
+
+.field label, div label {
+    font-size: 16px;
+    margin-bottom: 5px;
+    text-align: center;
+}
+
+.field input[type="text"],
+.field select, #toggle_button {
+    width: 100%;
+    padding: 15px;
+    font-size: 24px;
+    text-align: center;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f0f0f0;
+    appearance: none; /* Убираем стандартный стиль браузера для select */
+    transition: border-color 0.3s;
+}
+
+.field input[type="text"].selected,
+.field select.selected {
+    box-shadow: inset 0 0 0 3px #007BFF; /* Внутренняя тень, имитирующая границу */
+    outline: none; /* Убираем стандартный outline */
+}
+
+
+/* Стилизация стрелки в select */
+.field select {
+    position: relative;
+    background-image: url('data:image/svg+xml;charset=US-ASCII,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="%23666"><path d="M8 10L4 6h8z"/></svg>');
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 24px;
+    cursor: pointer;
+}
+
+.input-with-buttons {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 100%; /* Убедитесь, что контейнер имеет высоту */
+}
+
+.input-with-buttons input[type="text"] {
+    flex: 0 0 55%; /* Поле ввода занимает 60% ширины */
+    text-align: center;
+    font-size: 24px;
+    padding: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f0f0f0;
+    transition: border-color 0.3s;
+}
+
+.input-with-buttons input[type="text"]:focus,
+.input-with-buttons input[type="text"].selected {
+    border-color: #007BFF;
+    border-width: 3px;
+    outline: none;
+}
+
+.input-with-buttons .minus,
+.input-with-buttons .plus {
+    flex: 0 0 20%; /* Каждая кнопка занимает 20% ширины */
+    font-size: 24px;
+    cursor: pointer;
+    text-align: center;
+    border: 1px solid #ccc; /* Добавляем границу */
+    border-radius: 5px; /* Скругляем углы */
+    background-color: #f0f0f0; /* Фон как у полей ввода */
+    padding: 15px; /* Отступы как у полей ввода */
+    color: #333;
+    height: 100%; /* Кнопки занимают всю высоту контейнера */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box; /* Включаем padding и border в размеры элемента */
+    transition: border-color 0.3s, background-color 0.3s; /* Плавные переходы */
+}
+
+.input-with-buttons .minus {
+    left: 5px; /* Располагаем минус слева */
+    margin-right: 5px;
+}
+.input-with-buttons .plus {
+    right: 5px; /* Располагаем плюс справа */
+    margin-left: 5px;
+}
+
+/* Стилизация при нажатии */
+.input-with-buttons .minus:active,
+.input-with-buttons .plus:active {
+    border-color: #0056b3;
+    background-color: #d0d0d0;
+}
+
+.toggle-button:active {
+    background-color: #bbb;
+}
+
+.hidden {
+    display: none;
+}
+
+.keyboard {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.key-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.key-row button {
+    flex: 1;
+    margin: 0 5px;
+    padding: 20px;
+    font-size: 24px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #ddd;
+    cursor: pointer;
+    transition: background-color 0.1s, transform 0.1s;
+    user-select: none;
+}
+
+#coef_field, #runway_number {
+    flex: 0.6;
+}
+
+.key-row button:active,
+.key-row button.active {
+    background-color: #bbb;
+    transform: scale(0.98);
+}
+
+/* Кнопка "Вычислить" */
+.calculate-button {
+    flex: 1;
+    margin: 10px 5px 0 5px;
+    padding: 20px;
+    font-size: 24px;
+    border: none;
+    border-radius: 5px;
+    background-color: #28a745;
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.1s;
+    text-align: center;
+}
+
+.calculate-button:active {
+    background-color: #1e7e34;
+    transform: scale(0.98);
+}
+
+.toggle-wrapper label {
+    font-size: 16px;
+    margin-bottom: 5px;
+    text-align: center;
+}
+
+
+/* Темная тема */
+@media (prefers-color-scheme: dark) {
+    body {
+        background-color: #222;
+        color: #eee;
+    }
+
+    .field select {
+        background-image: url('data:image/svg+xml;charset=US-ASCII,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="%23EEE"><path d="M8 10L4 6h8z"/></svg>');
+    }
+
+    .field input[type="text"],
+    .field select {
+        background-color: #333;
+        border-color: #555;
+        color: #eee;
+    }
+
+    #toggle_button, .input-with-buttons .minus, .input-with-buttons .plus {
+        background-color: #333;
+        border-color: #555;
+        color: #eee;
+    }
+
+    .input-with-buttons .minus,
+    .input-with-buttons .plus {
+        color: #eee;
+    }
+
+    .toggle-button {
+        background-color: #444;
+        color: #eee;
+    }
+
+    .toggle-button:active {
+        background-color: #666;
+    }
+
+    .key-row button {
+        background-color: #444;
+        border-color: #666;
+        color: #eee;
+    }
+
+    .key-row button:active,
+    .key-row button.active {
+        background-color: #666;
+    }
+
+    .calculate-button {
+        background-color: #28a745;
+        color: #fff;
+    }
+
+    .calculate-button:active {
+        background-color: #1e7e34;
+    }
+}

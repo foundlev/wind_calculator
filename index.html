@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>Wind Calculator</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="container">
+    <div class="left">
+        <!-- Первая секция -->
+        <div class="section">
+            <div class="section-row">
+                <div class="field" id="runway_number">
+                    <label for="runway">ВПП</label>
+                    <input type="text" id="runway" readonly maxlength="2" value="00">
+                </div>
+                <div class="field">
+                    <label for="runway_course">Курс ВПП</label>
+                    <div class="input-with-buttons">
+                        <button class="minus" data-field="runway_course">-</button>
+                        <input type="text" id="runway_course" readonly maxlength="3" value="000">
+                        <button class="plus" data-field="runway_course">+</button>
+                    </div>
+                </div>
+                <div class="field field-runway-condition">
+                    <label for="runway_condition">Состояние ВПП</label>
+                    <select id="runway_condition">
+                        <option value="GOOD">GOOD (5)</option>
+                        <option value="GOOD_TO_MEDIUM">GOOD TO MEDIUM (4)</option>
+                        <option value="MEDIUM">MEDIUM (3)</option>
+                        <option value="MEDIUM_TO_POOR">MEDIUM TO POOR (2)</option>
+                        <option value="POOR">POOR (1)</option>
+                    </select>
+                </div>
+                <div class="field hidden" id="coef_field">
+                    <label for="friction_coeff">Коэф. сцепления</label>
+                    <input type="text" id="friction_coeff" readonly maxlength="2" value="00">
+                </div>
+                <div class="field hidden" id="measure_type_field">
+                    <label for="measure_type">Тип измерения</label>
+                    <select id="measure_type">
+                        <option value="Normative">Normative</option>
+                        <option value="By_SFT">By SFT</option>
+                    </select>
+                </div>
+                <div class="field button-field">
+                    <label for="toggle_button">Перекл</label>
+                    <button class="toggle-button" id="toggle_button">🔀</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Вторая секция -->
+        <div class="section">
+            <div class="section-row">
+                <div class="field">
+                    <label for="wind_direction">Направление ветра</label>
+                    <div class="input-with-buttons">
+                        <button class="minus" data-field="wind_direction">-</button>
+                        <input type="text" id="wind_direction" readonly maxlength="3" value="000">
+                        <button class="plus" data-field="wind_direction">+</button>
+                    </div>
+                </div>
+                <div class="field">
+                    <label for="wind_speed">Скорость ветра</label>
+                    <div class="input-with-buttons">
+                        <button class="minus" data-field="wind_speed">-</button>
+                        <input type="text" id="wind_speed" readonly maxlength="2" value="00">
+                        <button class="plus" data-field="wind_speed">+</button>
+                    </div>
+                </div>
+                <div class="field">
+                    <label for="speed_unit">Единицы скорости</label>
+                    <select id="speed_unit">
+                        <option value="MPS" selected>MPS</option>
+                        <option value="KT">KT</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Третья секция -->
+        <div class="section">
+            <div class="section-row">
+                <div class="field">
+                    <label for="longitudinal_component">Продольная составляющая</label>
+                    <input type="text" id="longitudinal_component" readonly value="---">
+                </div>
+                <div class="field">
+                    <label for="lateral_component">Боковая составляющая</label>
+                    <input type="text" id="lateral_component" readonly value="---">
+                </div>
+                <div class="field">
+                    <label for="to_limit">Ограничения T/O</label>
+                    <input type="text" id="to_limit" readonly value="-- / --">
+                </div>
+                <div class="field">
+                    <label for="ldg_limit">Ограничения LDG</label>
+                    <input type="text" id="ldg_limit" readonly value="-- / --">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="right">
+        <!-- Клавиатура -->
+        <div class="keyboard">
+            <div class="key-row">
+                <button class="key">1</button>
+                <button class="key">2</button>
+                <button class="key">3</button>
+            </div>
+            <div class="key-row">
+                <button class="key">4</button>
+                <button class="key">5</button>
+                <button class="key">6</button>
+            </div>
+            <div class="key-row">
+                <button class="key">7</button>
+                <button class="key">8</button>
+                <button class="key">9</button>
+            </div>
+            <div class="key-row">
+                <button class="key" id="clear_key">&#x2716;</button> <!-- [x] символ -->
+                <button class="key">0</button>
+                <button class="key" id="backspace_key">&#x232B;</button> <!-- [<] символ -->
+            </div>
+            <button class="calculate-button" id="calculate_button">Вычислить</button>
+        </div>
+    </div>
+</div>
+<script src="script.js"></script>
+</body>
+</html>
