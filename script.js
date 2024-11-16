@@ -354,6 +354,35 @@ document.addEventListener('DOMContentLoaded', () => {
             const ldgHalfValue = Math.round((ldgLimitValue / 2) * 10 - 1) / 10; // Округляем до 1 знака
             ldgLimitField.value = `${ldgLimitValue} / ${ldgHalfValue} ${speedUnit.toUpperCase()}`;
         }
+
+        const runwayCourse = parseFloat(document.getElementById('runway_course').value) || 0; // Курс ВПП в градусах
+        const windDirection = parseFloat(document.getElementById('wind_direction').value) || 0; // Направление ветра в градусах
+        const windSpeed = parseFloat(document.getElementById('wind_speed').value) || 0; // Скорость ветра
+        const longitudinalComponentField = document.getElementById('longitudinal_component');
+        const lateralComponentField = document.getElementById('lateral_component');
+
+        // Рассчитываем углы
+        const windAngle = ((windDirection - runwayCourse + 360) % 360) * (Math.PI / 180); // В радианах
+
+        // Продольная составляющая
+        const longitudinalComponent = Math.round(windSpeed * Math.cos(windAngle) * 10) / 10; // Округляем до 1 знака
+        let longitudinalText = longitudinalComponent > 0
+            ? `HW ${longitudinalComponent} ${speedUnit.toUpperCase()}`
+            : longitudinalComponent < 0
+            ? `TW ${Math.abs(longitudinalComponent)} ${speedUnit.toUpperCase()}`
+            : "0";
+
+        // Боковая составляющая
+        const lateralComponent = Math.round(windSpeed * Math.sin(windAngle) * 10) / 10; // Округляем до 1 знака
+        let lateralText = lateralComponent > 0
+            ? `XW (R) ${lateralComponent} ${speedUnit.toUpperCase()}`
+            : lateralComponent < 0
+            ? `XW (L) ${Math.abs(lateralComponent)} ${speedUnit.toUpperCase()}`
+            : "0";
+
+        // Устанавливаем значения
+        longitudinalComponentField.value = longitudinalText;
+        lateralComponentField.value = lateralText;
     });
 
     // Загрузка данных при старте
