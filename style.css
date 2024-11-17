@@ -235,14 +235,17 @@ body {
 
 .image-container {
     flex: 1; /* Занимает всю высоту секции */
-    overflow-y: auto; /* Включает вертикальную прокрутку */
+    overflow: scroll; /* Разрешает прокрутку */
     -webkit-overflow-scrolling: touch; /* Плавная прокрутка на iOS */
+    touch-action: none; /* Отключает жесты браузера, чтобы включить пользовательское масштабирование */
 }
 
 .image-container img {
-    width: 100%; /* Масштабирует по ширине */
+    width: 100%; /* Масштаб по ширине */
     height: auto; /* Сохраняет пропорции */
     display: block;
+    transform-origin: center; /* Точка начала масштабирования - центр */
+    touch-action: pinch-zoom; /* Включает жесты масштабирования (iOS, Android) */
 }
 
 /* Темная тема */
