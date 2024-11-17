@@ -336,6 +336,11 @@ document.addEventListener('DOMContentLoaded', () => {
         const frictionCoeffField = document.getElementById('friction_coeff');
         const measureTypeField = document.getElementById('measure_type');
 
+        let toFullLimit = null;
+        let toHalfLimit = null;
+        let ldgFullLimit = null;
+        let ldgHalfLimit = null;
+
         // Проверяем, какое поле активно: состояние ВПП или коэффициент сцепления
         if (!coeffMode.classList.contains('hidden')) {
             // Берем значение состояния ВПП
@@ -348,11 +353,15 @@ document.addEventListener('DOMContentLoaded', () => {
             // Форматируем и выводим значения
             const toLimitValue = speedUnit === "mps" ? takeoffLimits["mps"] : takeoffLimits["kts"];
             const toHalfValue = Math.round((toLimitValue / 2) * 10 - 1) / 10; // Округляем до 1 знака
-            toLimitField.value = `${toLimitValue} / ${toHalfValue} ${speedUnit.toUpperCase()}`;
+            toFullLimit = toLimitValue;
+            toHalfLimit = toHalfValue;
+            toLimitField.value = `${toLimitValue} ${speedUnit.toUpperCase()}`;
 
             const ldgLimitValue = speedUnit === "mps" ? landingLimits["mps"] : landingLimits["kts"];
             const ldgHalfValue = Math.round((ldgLimitValue / 2) * 10 - 1) / 10; // Округляем до 1 знака
-            ldgLimitField.value = `${ldgLimitValue} / ${ldgHalfValue} ${speedUnit.toUpperCase()}`;
+            ldgFullLimit = ldgLimitValue;
+            ldgHalfLimit = ldgHalfValue;
+            ldgLimitField.value = `${ldgLimitValue} ${speedUnit.toUpperCase()}`;
         } else if (!frictionCoeffField.classList.contains('hidden')) {
             // Берем коэффициент сцепления и тип измерения
             const frictionCoeff = parseFloat(frictionCoeffField.value) / 100; // Переводим в десятичное число
@@ -378,11 +387,17 @@ document.addEventListener('DOMContentLoaded', () => {
             // Форматируем и выводим значения
             const toLimitValue = speedUnit === "mps" ? takeoffLimit["mps"] : takeoffLimit["kts"];
             const toHalfValue = Math.round((toLimitValue / 2) * 10 - 1) / 10; // Округляем до 1 знака
-            toLimitField.value = `${toLimitValue} / ${toHalfValue} ${speedUnit.toUpperCase()}`;
+            toLimitField.value = `${toLimitValue} ${speedUnit.toUpperCase()}`;
+
+            toFullLimit = toLimitValue;
+            toHalfLimit = toHalfValue;
 
             const ldgLimitValue = speedUnit === "mps" ? landingLimit["mps"] : landingLimit["kts"];
             const ldgHalfValue = Math.round((ldgLimitValue / 2) * 10 - 1) / 10; // Округляем до 1 знака
-            ldgLimitField.value = `${ldgLimitValue} / ${ldgHalfValue} ${speedUnit.toUpperCase()}`;
+            ldgLimitField.value = `${ldgLimitValue} ${speedUnit.toUpperCase()}`;
+
+            ldgFullLimit = ldgLimitValue;
+            ldgHalfLimit = ldgHalfValue;
         }
 
         const runwayCourse = parseFloat(document.getElementById('runway_course').value) || 0; // Курс ВПП в градусах
@@ -425,18 +440,15 @@ document.addEventListener('DOMContentLoaded', () => {
         const toLimitText = toLimitField.value;
         const ldgLimitText = ldgLimitField.value;
 
-        const toFullLimit = parseFloat(toLimitText.split(" / ")[0]) || 0;
-        const toHalfLimit = parseFloat(toLimitText.split(" / ")[1]) || 0;
-
-        const ldgFullLimit = parseFloat(ldgLimitText.split(" / ")[0]) || 0;
-        const ldgHalfLimit = parseFloat(ldgLimitText.split(" / ")[1]) || 0;
-
         // Проверяем боковую составляющую против взлетных ограничений
         if (lateralComponentValue >= toHalfLimit && lateralComponentValue < toFullLimit) {
             toLimitField.style.backgroundColor = "orange";
             toLimitField.style.color = "black";
         } else if (lateralComponentValue >= toFullLimit) {
             toLimitField.style.backgroundColor = "red";
+            toLimitField.style.color = "white";
+        } else {
+            toLimitField.style.backgroundColor = "green";
             toLimitField.style.color = "white";
         }
 
@@ -446,6 +458,9 @@ document.addEventListener('DOMContentLoaded', () => {
             ldgLimitField.style.color = "black";
         } else if (lateralComponentValue >= ldgFullLimit) {
             ldgLimitField.style.backgroundColor = "red";
+            ldgLimitField.style.color = "white";
+        } else {
+            ldgLimitField.style.backgroundColor = "green";
             ldgLimitField.style.color = "white";
         }
 
