@@ -235,18 +235,20 @@ body {
 
 .image-container {
     flex: 1; /* Занимает всю высоту секции */
-    overflow: scroll; /* Разрешает прокрутку */
+    overflow: auto; /* Включает прокрутку */
     -webkit-overflow-scrolling: touch; /* Плавная прокрутка на iOS */
-    touch-action: none; /* Отключает жесты браузера, чтобы включить пользовательское масштабирование */
+    position: relative; /* Для корректной работы с трансформациями */
 }
 
 .image-container img {
-    width: 100%; /* Масштаб по ширине */
+    width: 100%; /* Изначально изображение подгоняется по ширине */
     height: auto; /* Сохраняет пропорции */
     display: block;
-    transform-origin: center; /* Точка начала масштабирования - центр */
-    touch-action: pinch-zoom; /* Включает жесты масштабирования (iOS, Android) */
+    transform-origin: center; /* Центр масштабирования */
+    user-select: none; /* Отключает выделение изображения */
+    touch-action: none; /* Включает обработку жестов мультитач */
 }
+
 
 /* Темная тема */
 @media (prefers-color-scheme: dark) {
