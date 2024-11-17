@@ -225,6 +225,25 @@ body {
     text-align: center;
 }
 
+/* Четвертая секция */
+.image-section {
+    flex: 1; /* Занимает оставшееся пространство */
+    overflow: hidden; /* Скрывает лишнее */
+    display: flex;
+    flex-direction: column;
+}
+
+.image-container {
+    flex: 1; /* Занимает всю высоту секции */
+    overflow-y: auto; /* Включает вертикальную прокрутку */
+    -webkit-overflow-scrolling: touch; /* Плавная прокрутка на iOS */
+}
+
+.image-container img {
+    width: 100%; /* Масштабирует по ширине */
+    height: auto; /* Сохраняет пропорции */
+    display: block;
+}
 
 /* Темная тема */
 @media (prefers-color-scheme: dark) {
