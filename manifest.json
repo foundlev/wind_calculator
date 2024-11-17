@@ -1,7 +1,7 @@
 {
   "name": "Wind Calculator",
   "short_name": "Wind Calc",
-  "start_url": "/index.html",
+  "start_url": "/wind_calculator/index.html",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#007BFF",
