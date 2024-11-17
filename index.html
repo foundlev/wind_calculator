@@ -5,6 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <title>Wind Calculator</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#ffffff">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="icon" href="icons/icons8-prequel-app-64.png" sizes="64x64" type="image/png">
+    <link rel="icon" href="icons/icons8-prequel-app-128.png" sizes="128x128" type="image/png">
+    <link rel="apple-touch-icon" href="icons/icons8-prequel-app-128.png">
 </head>
 <body>
 <div class="container">
@@ -75,7 +82,7 @@
                     <label for="speed_unit">Единицы скорости</label>
                     <select id="speed_unit">
                         <option value="MPS" selected>MPS</option>
-                        <option value="KT">KT</option>
+                        <option value="KTS">KTS</option>
                     </select>
                 </div>
             </div>
@@ -94,11 +101,11 @@
                 </div>
                 <div class="field">
                     <label for="to_limit">Ограничения T/O</label>
-                    <input type="text" id="to_limit" readonly value="-- / --">
+                    <input type="text" id="to_limit" readonly value="---">
                 </div>
                 <div class="field">
                     <label for="ldg_limit">Ограничения LDG</label>
-                    <input type="text" id="ldg_limit" readonly value="-- / --">
+                    <input type="text" id="ldg_limit" readonly value="---">
                 </div>
             </div>
         </div>
@@ -132,5 +139,13 @@
     </div>
 </div>
 <script src="script.js"></script>
+<script>
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker
+        .register("/service-worker.js")
+        .then(() => console.log("Service Worker зарегистрирован"))
+        .catch(error => console.error("Ошибка регистрации Service Worker:", error));
+    }
+</script>
 </body>
 </html>

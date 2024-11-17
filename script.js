@@ -164,6 +164,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Сохранение при изменении select
         if (field.tagName.toLowerCase() === 'select') {
             field.addEventListener('change', () => {
+                clearCalculations();
                 saveData(field.id, field.value);
             });
         }
@@ -173,6 +174,7 @@ document.addEventListener('DOMContentLoaded', () => {
     keyboardKeys.forEach(key => {
         key.addEventListener('click', () => {
             if (!activeField) return;
+            clearCalculations();
             const keyValue = key.textContent.trim();
             const fieldId = activeField.id;
             const maxLength = inputFields[fieldId];
@@ -231,6 +233,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const measureTypeField = document.getElementById('measure_type_field');
 
     toggleButton.addEventListener('click', () => {
+        clearCalculations();
         const isHidden = stateField.classList.contains('hidden');
         toggleFields(!isHidden); // Передаём противоположное значение
         localStorage.setItem('toggle_state', !isHidden); // Сохраняем новое состояние
@@ -253,6 +256,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     adjustButtons.forEach(button => {
         button.addEventListener('click', () => {
+            clearCalculations();
             const fieldId = button.getAttribute('data-field');
             const input = document.getElementById(fieldId);
             const inputId = input.id;
@@ -301,6 +305,24 @@ document.addEventListener('DOMContentLoaded', () => {
         fields.forEach(field => {
             field.style.backgroundColor = "";
             field.style.color = "";
+        });
+    }
+
+    // Функция для очистки полей вычислений
+    function clearCalculations() {
+        // Поля для сброса
+        const fieldsToClear = [
+            document.getElementById('longitudinal_component'),
+            document.getElementById('lateral_component'),
+            document.getElementById('to_limit'),
+            document.getElementById('ldg_limit')
+        ];
+
+        // Сбрасываем значения и очищаем стили
+        fieldsToClear.forEach(field => {
+            field.value = "---"; // Устанавливаем значение по умолчанию
+            field.style.backgroundColor = ""; // Сбрасываем цвет фона
+            field.style.color = ""; // Сбрасываем цвет текста
         });
     }
 
@@ -393,7 +415,7 @@ document.addEventListener('DOMContentLoaded', () => {
         lateralComponentField.value = lateralText;
 
         // Сброс цветов фона
-        resetBackgrounds(toLimitField, ldgLimitField);
+        resetBackgrounds(toLimitField, ldgLimitField, longitudinalComponentField);
 
         // Извлекаем боковую составляющую ветра
         const lateralComponentText = lateralComponentField.value;
@@ -425,6 +447,15 @@ document.addEventListener('DOMContentLoaded', () => {
         } else if (lateralComponentValue >= ldgFullLimit) {
             ldgLimitField.style.backgroundColor = "red";
             ldgLimitField.style.color = "white";
+        }
+
+        // Проверяем продольную составляющую
+        if (
+            (speedUnit === "kts" && longitudinalComponent <= -15) ||
+            (speedUnit === "mps" && longitudinalComponent <= -7.72)
+        ) {
+            longitudinalComponentField.style.backgroundColor = "red";
+            longitudinalComponentField.style.color = "white";
         }
     });
 

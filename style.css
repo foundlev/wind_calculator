@@ -29,7 +29,7 @@ body {
     padding: 20px;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: start;
 }
 
 .section {
@@ -82,7 +82,8 @@ body {
 }
 
 .field input[type="text"].selected,
-.field select.selected {
+.field select.selected,
+.input-with-buttons input[type="text"].selected{
     box-shadow: inset 0 0 0 3px #007BFF; /* Внутренняя тень, имитирующая границу */
     outline: none; /* Убираем стандартный outline */
 }
@@ -114,13 +115,6 @@ body {
     border-radius: 5px;
     background-color: #f0f0f0;
     transition: border-color 0.3s;
-}
-
-.input-with-buttons input[type="text"]:focus,
-.input-with-buttons input[type="text"].selected {
-    border-color: #007BFF;
-    border-width: 3px;
-    outline: none;
 }
 
 .input-with-buttons .minus,
