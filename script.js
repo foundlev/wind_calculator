@@ -477,3 +477,69 @@ document.addEventListener('DOMContentLoaded', () => {
     // Загрузка данных при старте
     loadData();
 });
+
+document.addEventListener('DOMContentLoaded', () => {
+    const imageContainer = document.querySelector('.image-container');
+    const img = imageContainer.querySelector('img');
+
+    let scale = 1; // Начальный масштаб
+    let currentX = 0; // Начальная позиция по X
+    let currentY = 0; // Начальная позиция по Y
+    let lastTouchDistance = 0; // Расстояние между пальцами
+    let lastTouchPosition = null;
+
+    // Функция для расчета расстояния между двумя точками
+    function getDistance(touches) {
+        const dx = touches[0].clientX - touches[1].clientX;
+        const dy = touches[0].clientY - touches[1].clientY;
+        return Math.sqrt(dx * dx + dy * dy);
+    }
+
+    // Функция для расчета среднего положения между двумя точками
+    function getMidpoint(touches) {
+        return {
+            x: (touches[0].clientX + touches[1].clientX) / 2,
+            y: (touches[0].clientY + touches[1].clientY) / 2,
+        };
+    }
+
+    // Обработчик жеста "pinch-to-zoom"
+    imageContainer.addEventListener('touchmove', (event) => {
+        if (event.touches.length === 2) {
+            const currentDistance = getDistance(event.touches);
+            const midpoint = getMidpoint(event.touches);
+
+            if (lastTouchDistance) {
+                const distanceDelta = currentDistance - lastTouchDistance;
+                scale += distanceDelta / 300; // Изменение масштаба
+                scale = Math.min(Math.max(0.5, scale), 5); // Ограничение масштаба
+            }
+
+            if (lastTouchPosition) {
+                currentX += midpoint.x - lastTouchPosition.x;
+                currentY += midpoint.y - lastTouchPosition.y;
+            }
+
+            lastTouchDistance = currentDistance;
+            lastTouchPosition = midpoint;
+
+            img.style.transform = `scale(${scale}) translate(${currentX}px, ${currentY}px)`;
+        }
+    });
+
+    // Сброс состояния при завершении жеста
+    imageContainer.addEventListener('touchend', (event) => {
+        if (event.touches.length < 2) {
+            lastTouchDistance = 0;
+            lastTouchPosition = null;
+        }
+    });
+
+    // Сброс начальных координат при касании
+    imageContainer.addEventListener('touchstart', (event) => {
+        if (event.touches.length === 2) {
+            lastTouchDistance = getDistance(event.touches);
+            lastTouchPosition = getMidpoint(event.touches);
+        }
+    });
+});

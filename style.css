@@ -235,19 +235,21 @@ body {
 
 .image-container {
     flex: 1; /* Занимает всю высоту секции */
-    overflow: auto; /* Включает прокрутку */
-    -webkit-overflow-scrolling: touch; /* Плавная прокрутка на iOS */
-    position: relative; /* Для корректной работы с трансформациями */
+    overflow: hidden; /* Скрывает прокрутку */
+    position: relative;
+    touch-action: none; /* Отключает стандартную обработку жестов */
 }
 
 .image-container img {
     width: 100%; /* Изначально изображение подгоняется по ширине */
     height: auto; /* Сохраняет пропорции */
     display: block;
-    transform-origin: center; /* Центр масштабирования */
+    transform-origin: center; /* Центр трансформаций */
+    transform: scale(1) translate(0, 0); /* Начальные параметры */
     user-select: none; /* Отключает выделение изображения */
-    touch-action: none; /* Включает обработку жестов мультитач */
+    pointer-events: none; /* Отключает события мыши */
 }
+
 
 
 /* Темная тема */
