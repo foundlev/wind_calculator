@@ -543,3 +543,21 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 });
+
+document.addEventListener("DOMContentLoaded", () => {
+    const runwayCondition = document.getElementById("runway_condition");
+    const imageElement = document.querySelector(".image-container img");
+
+    const updateImageVisibility = () => {
+        const isVisible = !runwayCondition.parentElement.classList.contains("hidden");
+        imageElement.setAttribute("data-condition-visible", isVisible);
+    };
+
+    // Обновляем изображение при загрузке
+    updateImageVisibility();
+
+    // Слушаем события изменения состояния поля
+    const toggleButton = document.getElementById("toggle_button");
+    toggleButton.addEventListener("click", updateImageVisibility);
+});
+

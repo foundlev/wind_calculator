@@ -250,6 +250,25 @@ body {
     pointer-events: none; /* Отключает события мыши */
 }
 
+@media (prefers-color-scheme: dark) {
+    .image-container img[data-condition-visible="true"] {
+        content: url("pics/action_table_dark.png");
+    }
+
+    .image-container img[data-condition-visible="false"] {
+        content: url("pics/coeff_table_dark.png");
+    }
+}
+
+@media (prefers-color-scheme: light) {
+    .image-container img[data-condition-visible="true"] {
+        content: url("pics/action_table.png");
+    }
+
+    .image-container img[data-condition-visible="false"] {
+        content: url("pics/coeff_table.png");
+    }
+}
 
 
 /* Темная тема */
