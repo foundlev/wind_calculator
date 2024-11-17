@@ -405,9 +405,9 @@ document.addEventListener('DOMContentLoaded', () => {
         // Боковая составляющая
         const lateralComponent = Math.round(windSpeed * Math.sin(windAngle) * 10) / 10; // Округляем до 1 знака
         let lateralText = lateralComponent > 0
-            ? `XW (R) ${lateralComponent} ${speedUnit.toUpperCase()}`
+            ? `(R) ${lateralComponent} ${speedUnit.toUpperCase()}`
             : lateralComponent < 0
-            ? `XW (L) ${Math.abs(lateralComponent)} ${speedUnit.toUpperCase()}`
+            ? `(L) ${Math.abs(lateralComponent)} ${speedUnit.toUpperCase()}`
             : "0";
 
         // Устанавливаем значения
