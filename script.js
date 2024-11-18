@@ -479,21 +479,24 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 document.addEventListener('DOMContentLoaded', () => {
-    const image = document.getElementById('panzoom-image'); // Выбираем изображение
-    const resetButton = document.getElementById('reset_button'); // Кнопка сброса
+    const image = document.getElementById('panzoom-image');
+    const resetButton = document.getElementById('reset_button');
+    const container = document.querySelector('.image-container');
 
     // Инициализация Panzoom
     const panzoom = Panzoom(image, {
-        maxScale: 5,  // Максимальное увеличение
-        minScale: 0.5, // Минимальное уменьшение
-        contain: 'outside', // Ограничение выхода за пределы контейнера
+        maxScale: 5,
+        minScale: 0.5,
+        contain: 'outside',
     });
 
-    // Добавляем поддержку жестов (тачскрин)
-    image.parentElement.addEventListener('wheel', panzoom.zoomWithWheel);
+    container.addEventListener('wheel', panzoom.zoomWithWheel);
 
-    // Сброс масштаба и позиции
+    container.addEventListener('touchstart', () => console.log('touchstart detected'));
+    container.addEventListener('touchmove', () => console.log('touchmove detected'));
+
     resetButton.addEventListener('click', () => {
+        console.log('Reset button clicked');
         panzoom.reset();
     });
 });
