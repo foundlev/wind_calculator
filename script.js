@@ -481,12 +481,15 @@ document.addEventListener('DOMContentLoaded', () => {
 document.addEventListener('DOMContentLoaded', () => {
     const imageContainer = document.querySelector('.image-container');
     const img = imageContainer.querySelector('img');
+    const resetButton = document.getElementById('reset_button');
 
-    let scale = 1; // Начальный масштаб
-    let currentX = 0; // Начальная позиция по X
-    let currentY = 0; // Начальная позиция по Y
-    let lastTouchDistance = 0; // Расстояние между пальцами
-    let lastTouchPosition = null;
+    let scale = 1;
+    let currentX = 0;
+    let currentY = 0;
+    let lastX = 0;
+    let lastY = 0;
+    let isDragging = false;
+    let lastTouchDistance = 0;
 
     // Функция для расчета расстояния между двумя точками
     function getDistance(touches) {
@@ -495,52 +498,64 @@ document.addEventListener('DOMContentLoaded', () => {
         return Math.sqrt(dx * dx + dy * dy);
     }
 
-    // Функция для расчета среднего положения между двумя точками
-    function getMidpoint(touches) {
-        return {
-            x: (touches[0].clientX + touches[1].clientX) / 2,
-            y: (touches[0].clientY + touches[1].clientY) / 2,
-        };
-    }
-
-    // Обработчик жеста "pinch-to-zoom"
+    // Функция для обработки touchmove
     imageContainer.addEventListener('touchmove', (event) => {
         if (event.touches.length === 2) {
-            const currentDistance = getDistance(event.touches);
-            const midpoint = getMidpoint(event.touches);
+            // Масштабирование двумя пальцами
+            event.preventDefault();
+            const distance = getDistance(event.touches);
 
             if (lastTouchDistance) {
-                const distanceDelta = currentDistance - lastTouchDistance;
-                scale += distanceDelta / 300; // Изменение масштаба
-                scale = Math.min(Math.max(0.5, scale), 5); // Ограничение масштаба
+                const delta = distance - lastTouchDistance;
+                scale = Math.min(Math.max(scale + delta / 300, 0.5), 5); // Ограничение масштаба
+                img.style.transform = `scale(${scale}) translate(${currentX}px, ${currentY}px)`;
             }
 
-            if (lastTouchPosition) {
-                currentX += midpoint.x - lastTouchPosition.x;
-                currentY += midpoint.y - lastTouchPosition.y;
-            }
+            lastTouchDistance = distance;
+        } else if (event.touches.length === 1 && isDragging) {
+            // Перетаскивание одним пальцем
+            event.preventDefault();
+            const touch = event.touches[0];
+            const deltaX = touch.clientX - lastX;
+            const deltaY = touch.clientY - lastY;
 
-            lastTouchDistance = currentDistance;
-            lastTouchPosition = midpoint;
+            currentX += deltaX;
+            currentY += deltaY;
+
+            lastX = touch.clientX;
+            lastY = touch.clientY;
 
             img.style.transform = `scale(${scale}) translate(${currentX}px, ${currentY}px)`;
         }
     });
 
-    // Сброс состояния при завершении жеста
-    imageContainer.addEventListener('touchend', (event) => {
-        if (event.touches.length < 2) {
-            lastTouchDistance = 0;
-            lastTouchPosition = null;
+    // Функция для обработки touchstart
+    imageContainer.addEventListener('touchstart', (event) => {
+        if (event.touches.length === 1) {
+            // Начало перетаскивания
+            isDragging = true;
+            lastX = event.touches[0].clientX;
+            lastY = event.touches[0].clientY;
+        } else if (event.touches.length === 2) {
+            // Начало масштабирования
+            lastTouchDistance = getDistance(event.touches);
         }
     });
 
-    // Сброс начальных координат при касании
-    imageContainer.addEventListener('touchstart', (event) => {
-        if (event.touches.length === 2) {
-            lastTouchDistance = getDistance(event.touches);
-            lastTouchPosition = getMidpoint(event.touches);
+    // Функция для обработки touchend
+    imageContainer.addEventListener('touchend', (event) => {
+        if (event.touches.length === 0) {
+            isDragging = false;
+            lastTouchDistance = 0;
         }
+    });
+
+    // Обработчик кнопки сброса
+    resetButton.addEventListener('click', () => {
+        scale = 1;
+        currentX = 0;
+        currentY = 0;
+        img.style.transform = `scale(${scale}) translate(${currentX}px, ${currentY}px)`;
     });
 });
 
@@ -559,68 +574,4 @@ document.addEventListener("DOMContentLoaded", () => {
     // Слушаем события изменения состояния поля
     const toggleButton = document.getElementById("toggle_button");
     toggleButton.addEventListener("click", updateImageVisibility);
-});
-
-document.addEventListener('DOMContentLoaded', () => {
-    const imageContainer = document.querySelector('.image-container');
-    const img = imageContainer.querySelector('img');
-    const resetButton = document.getElementById('reset_button');
-
-    let scale = 1;
-    let currentX = 0;
-    let currentY = 0;
-    let lastX = 0;
-    let lastY = 0;
-    let isDragging = false;
-
-    // Обработчик для масштабирования и перетаскивания двумя пальцами
-    imageContainer.addEventListener('touchmove', (event) => {
-        if (event.touches.length === 2) {
-            event.preventDefault();
-            const [touch1, touch2] = event.touches;
-            const dx = touch2.clientX - touch1.clientX;
-            const dy = touch2.clientY - touch1.clientY;
-            const distance = Math.sqrt(dx * dx + dy * dy);
-
-            if (lastTouchDistance) {
-                const delta = distance - lastTouchDistance;
-                scale = Math.min(Math.max(scale + delta / 300, 0.5), 5); // Ограничение масштаба
-            }
-
-            lastTouchDistance = distance;
-        } else if (event.touches.length === 1 && isDragging) {
-            event.preventDefault();
-            const touch = event.touches[0];
-            const deltaX = touch.clientX - lastX;
-            const deltaY = touch.clientY - lastY;
-            currentX += deltaX;
-            currentY += deltaY;
-            lastX = touch.clientX;
-            lastY = touch.clientY;
-
-            img.style.transform = `scale(${scale}) translate(${currentX}px, ${currentY}px)`;
-        }
-    });
-
-    imageContainer.addEventListener('touchstart', (event) => {
-        if (event.touches.length === 1) {
-            isDragging = true;
-            lastX = event.touches[0].clientX;
-            lastY = event.touches[0].clientY;
-        } else if (event.touches.length === 2) {
-            lastTouchDistance = null;
-        }
-    });
-
-    imageContainer.addEventListener('touchend', () => {
-        isDragging = false;
-    });
-
-    // Обработчик кнопки сброса
-    resetButton.addEventListener('click', () => {
-        scale = 1;
-        currentX = 0;
-        currentY = 0;
-        img.style.transform = `scale(${scale}) translate(${currentX}px, ${currentY}px)`;
-    });
 });
