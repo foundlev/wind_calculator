@@ -479,25 +479,83 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 document.addEventListener('DOMContentLoaded', () => {
-    const image = document.getElementById('panzoom-image');
+    const imageContainer = document.querySelector('.image-container');
+    const img = imageContainer.querySelector('img');
     const resetButton = document.getElementById('reset_button');
-    const container = document.querySelector('.image-container');
 
-    // Инициализация Panzoom
-    const panzoom = Panzoom(image, {
-        maxScale: 5,
-        minScale: 0.5,
-        contain: 'outside',
+    let scale = 1;
+    let currentX = 0;
+    let currentY = 0;
+    let lastX = 0;
+    let lastY = 0;
+    let isDragging = false;
+    let lastTouchDistance = 0;
+
+    // Функция для расчета расстояния между двумя точками
+    function getDistance(touches) {
+        const dx = touches[0].clientX - touches[1].clientX;
+        const dy = touches[0].clientY - touches[1].clientY;
+        return Math.sqrt(dx * dx + dy * dy);
+    }
+
+    // Функция для обработки touchmove
+    imageContainer.addEventListener('touchmove', (event) => {
+        if (event.touches.length === 2) {
+            // Масштабирование двумя пальцами
+            event.preventDefault();
+            const distance = getDistance(event.touches);
+
+            if (lastTouchDistance) {
+                const delta = distance - lastTouchDistance;
+                scale = Math.min(Math.max(scale + delta / 300, 0.5), 5); // Ограничение масштаба
+                img.style.transform = `scale(${scale}) translate(${currentX}px, ${currentY}px)`;
+            }
+
+            lastTouchDistance = distance;
+        } else if (event.touches.length === 1 && isDragging) {
+            // Перетаскивание одним пальцем
+            event.preventDefault();
+            const touch = event.touches[0];
+            const deltaX = touch.clientX - lastX;
+            const deltaY = touch.clientY - lastY;
+
+            currentX += deltaX;
+            currentY += deltaY;
+
+            lastX = touch.clientX;
+            lastY = touch.clientY;
+
+            img.style.transform = `scale(${scale}) translate(${currentX}px, ${currentY}px)`;
+        }
     });
 
-    container.addEventListener('wheel', panzoom.zoomWithWheel);
+    // Функция для обработки touchstart
+    imageContainer.addEventListener('touchstart', (event) => {
+        if (event.touches.length === 1) {
+            // Начало перетаскивания
+            isDragging = true;
+            lastX = event.touches[0].clientX;
+            lastY = event.touches[0].clientY;
+        } else if (event.touches.length === 2) {
+            // Начало масштабирования
+            lastTouchDistance = getDistance(event.touches);
+        }
+    });
 
-    container.addEventListener('touchstart', () => console.log('touchstart detected'));
-    container.addEventListener('touchmove', () => console.log('touchmove detected'));
+    // Функция для обработки touchend
+    imageContainer.addEventListener('touchend', (event) => {
+        if (event.touches.length === 0) {
+            isDragging = false;
+            lastTouchDistance = 0;
+        }
+    });
 
+    // Обработчик кнопки сброса
     resetButton.addEventListener('click', () => {
-        console.log('Reset button clicked');
-        panzoom.reset();
+        scale = 1;
+        currentX = 0;
+        currentY = 0;
+        img.style.transform = `scale(${scale}) translate(${currentX}px, ${currentY}px)`;
     });
 });
 
