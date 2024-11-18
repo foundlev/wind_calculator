@@ -4,8 +4,14 @@ const CACHE_URLS = [
   "/index.html",
   "/style.css",
   "/script.js",
-  "/icons/icon-192x192.png",
-  "/icons/icon-512x512.png"
+  "/icons/icons8-prequel-app-64.png",
+  "/icons/icons8-prequel-app-128.png",
+  "/icons/icons8-prequel-app-256.png",
+  "/icons/icons8-prequel-app-512.png",
+  "/pics/action_table.png",
+  "/pics/action_table_dark.png",
+  "/pics/coeff_table.png",
+  "/pics/coeff_table_dark.png"
 ];
 
 // Устанавливаем Service Worker и кэшируем файлы
