@@ -483,6 +483,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const img = imageContainer.querySelector('img');
     const resetButton = document.getElementById('reset_button');
 
+    const upArrow = document.querySelector('.arrow-btn.up');
+    const downArrow = document.querySelector('.arrow-btn.down');
+
     let scale = 1;
     let currentX = 0;
     let currentY = 0;
@@ -490,6 +493,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let lastY = 0;
     let isDragging = false;
     let lastTouchDistance = 0;
+    const step = 100; // Шаг перемещения изображения
 
     // Функция для расчета расстояния между двумя точками
     function getDistance(touches) {
@@ -556,6 +560,17 @@ document.addEventListener('DOMContentLoaded', () => {
         currentX = 0;
         currentY = 0;
         img.style.transform = `scale(${scale}) translate(${currentX}px, ${currentY}px)`;
+    });
+
+    // Обработчики для стрелок
+    downArrow.addEventListener('click', () => {
+        currentY -= step;
+        img.style.transform = `translateY(${currentY}px)`;
+    });
+
+    upArrow.addEventListener('click', () => {
+        currentY += step;
+        img.style.transform = `translateY(${currentY}px)`;
     });
 });
 
