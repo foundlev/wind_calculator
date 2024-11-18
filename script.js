@@ -561,3 +561,66 @@ document.addEventListener("DOMContentLoaded", () => {
     toggleButton.addEventListener("click", updateImageVisibility);
 });
 
+document.addEventListener('DOMContentLoaded', () => {
+    const imageContainer = document.querySelector('.image-container');
+    const img = imageContainer.querySelector('img');
+    const resetButton = document.getElementById('reset_button');
+
+    let scale = 1;
+    let currentX = 0;
+    let currentY = 0;
+    let lastX = 0;
+    let lastY = 0;
+    let isDragging = false;
+
+    // Обработчик для масштабирования и перетаскивания двумя пальцами
+    imageContainer.addEventListener('touchmove', (event) => {
+        if (event.touches.length === 2) {
+            event.preventDefault();
+            const [touch1, touch2] = event.touches;
+            const dx = touch2.clientX - touch1.clientX;
+            const dy = touch2.clientY - touch1.clientY;
+            const distance = Math.sqrt(dx * dx + dy * dy);
+
+            if (lastTouchDistance) {
+                const delta = distance - lastTouchDistance;
+                scale = Math.min(Math.max(scale + delta / 300, 0.5), 5); // Ограничение масштаба
+            }
+
+            lastTouchDistance = distance;
+        } else if (event.touches.length === 1 && isDragging) {
+            event.preventDefault();
+            const touch = event.touches[0];
+            const deltaX = touch.clientX - lastX;
+            const deltaY = touch.clientY - lastY;
+            currentX += deltaX;
+            currentY += deltaY;
+            lastX = touch.clientX;
+            lastY = touch.clientY;
+
+            img.style.transform = `scale(${scale}) translate(${currentX}px, ${currentY}px)`;
+        }
+    });
+
+    imageContainer.addEventListener('touchstart', (event) => {
+        if (event.touches.length === 1) {
+            isDragging = true;
+            lastX = event.touches[0].clientX;
+            lastY = event.touches[0].clientY;
+        } else if (event.touches.length === 2) {
+            lastTouchDistance = null;
+        }
+    });
+
+    imageContainer.addEventListener('touchend', () => {
+        isDragging = false;
+    });
+
+    // Обработчик кнопки сброса
+    resetButton.addEventListener('click', () => {
+        scale = 1;
+        currentX = 0;
+        currentY = 0;
+        img.style.transform = `scale(${scale}) translate(${currentX}px, ${currentY}px)`;
+    });
+});

@@ -234,20 +234,37 @@ body {
 }
 
 .image-container {
-    flex: 1; /* Занимает всю высоту секции */
-    overflow: hidden; /* Скрывает прокрутку */
+    flex: 1;
+    overflow: hidden;
     position: relative;
     touch-action: none; /* Отключает стандартную обработку жестов */
 }
 
 .image-container img {
-    width: 100%; /* Изначально изображение подгоняется по ширине */
-    height: auto; /* Сохраняет пропорции */
+    width: 100%;
+    height: auto;
     display: block;
-    transform-origin: center; /* Центр трансформаций */
-    transform: scale(1) translate(0, 0); /* Начальные параметры */
-    user-select: none; /* Отключает выделение изображения */
-    pointer-events: none; /* Отключает события мыши */
+    transform-origin: center;
+    transform: scale(1) translate(0, 0);
+    user-select: none;
+    transition: transform 0.2s ease-in-out; /* Плавность сброса позиции */
+}
+
+.reset-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    padding: 10px;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    z-index: 10;
+}
+
+.reset-button:hover {
+    background-color: rgba(0, 0, 0, 0.7);
 }
 
 @media (prefers-color-scheme: dark) {
