@@ -1,3 +1,5 @@
+let gesturesEnabled = true; // По умолчанию жесты включены
+
 document.addEventListener('DOMContentLoaded', () => {
     const fields = document.querySelectorAll('.field input[type="text"], .field select');
     const keyboardKeys = document.querySelectorAll('.key');
@@ -504,6 +506,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Функция для обработки touchmove
     imageContainer.addEventListener('touchmove', (event) => {
+        if (!gesturesEnabled) { return }
+
         if (event.touches.length === 2) {
             // Масштабирование двумя пальцами
             event.preventDefault();
@@ -535,6 +539,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Функция для обработки touchstart
     imageContainer.addEventListener('touchstart', (event) => {
+        if (!gesturesEnabled) { return }
         if (event.touches.length === 1) {
             // Начало перетаскивания
             isDragging = true;
@@ -548,6 +553,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Функция для обработки touchend
     imageContainer.addEventListener('touchend', (event) => {
+        if (!gesturesEnabled) { return }
         if (event.touches.length === 0) {
             isDragging = false;
             lastTouchDistance = 0;
@@ -589,4 +595,39 @@ document.addEventListener("DOMContentLoaded", () => {
     // Слушаем события изменения состояния поля
     const toggleButton = document.getElementById("toggle_button");
     toggleButton.addEventListener("click", updateImageVisibility);
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+    const blockButton = document.getElementById('block_button');
+    const imageContainer = document.querySelector('.image-container');
+
+    // Функция для сохранения состояния в localStorage
+    const saveGesturesState = () => {
+        localStorage.setItem('gesturesEnabled', gesturesEnabled ? 'true' : 'false');
+    };
+
+    // Функция для загрузки состояния из localStorage
+    const loadGesturesState = () => {
+        const savedState = localStorage.getItem('gesturesEnabled');
+        if (savedState !== null) {
+            gesturesEnabled = savedState === 'true';
+            updateGesturesState(); // Применяем состояние
+        }
+    };
+
+    // Функция для обновления состояния
+    const updateGesturesState = () => {
+        blockButton.textContent = gesturesEnabled ? 'Блок' : 'Разблок';
+//        imageContainer.style.pointerEvents = gesturesEnabled ? 'auto' : 'none';
+    };
+
+    // Событие клика по кнопке
+    blockButton.addEventListener('click', () => {
+        gesturesEnabled = !gesturesEnabled; // Переключаем состояние
+        updateGesturesState(); // Обновляем UI
+        saveGesturesState(); // Сохраняем состояние
+    });
+
+    // Загружаем состояние при старте
+    loadGesturesState();
 });

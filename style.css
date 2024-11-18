@@ -240,7 +240,7 @@ body {
     touch-action: none; /* Отключаем стандартные жесты браузера */
 }
 
-.reset-button {
+.reset-button, .block-button {
     position: absolute;
     font-size: 22px;
     top: 10px;
@@ -258,9 +258,21 @@ body {
     background-color: rgba(0, 0, 0, 0.7);
 }
 
+.block-button {
+    top: 60px; /* Располагаем под кнопкой сброса */
+}
+
+.block-button:hover {
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
+.block-button:active {
+    background-color: rgba(0, 0, 0, 0.9);
+}
+
 .arrow-controls {
     position: absolute;
-    top: 70px; /* Располагаем стрелки внизу, но внутри контейнера */
+    top: 115px; /* Располагаем стрелки внизу, но внутри контейнера */
     right: 10px;
     display: flex;
     flex-direction: column;
@@ -301,6 +313,22 @@ body {
     transform: scale(1) translate(0, 0);
     user-select: none;
     z-index: 1; /* Убедимся, что изображение под кнопками */
+}
+
+/* Темная тема */
+@media (prefers-color-scheme: dark) {
+    .block-button {
+        background-color: rgba(255, 255, 255, 0.5);
+        color: black;
+    }
+
+    .block-button:hover {
+        background-color: rgba(255, 255, 255, 0.7);
+    }
+
+    .block-button:active {
+        background-color: rgba(255, 255, 255, 0.9);
+    }
 }
 
 /* Темная тема */
