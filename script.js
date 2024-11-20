@@ -9,6 +9,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const longitudinalComponentField = document.getElementById('longitudinal_component');
     const lateralComponentField = document.getElementById('lateral_component');
 
+    const toLimitLabel = document.getElementById('to_limit_label');
+    const ldgLimitLabel = document.getElementById('ldg_limit_label');
+
     let activeField = null;
 
     const levelClasses = ['level-0', 'level-1', 'level-2', 'level-3'];
@@ -183,12 +186,14 @@ document.addEventListener('DOMContentLoaded', () => {
     keyboardKeys.forEach(key => {
         key.addEventListener('click', () => {
             if (!activeField) return;
-            clearCalculations();
 
             const keyValue = key.textContent.trim();
             const fieldId = activeField.id;
             const maxLength = inputFields[fieldId];
             let maxValue = maxValues[fieldId];
+            const notClearCalculationsIds = ['reset_button', 'arrow-up', 'arrow-down', 'block_button', 'help']
+
+            clearCalculations();
 
             let currentValue = activeField.value.replace(/^0+/, '');
 
@@ -322,6 +327,10 @@ document.addEventListener('DOMContentLoaded', () => {
     // Функция для очистки полей вычислений
     function clearCalculations() {
         resetBackgrounds(toLimitField, ldgLimitField, longitudinalComponentField);
+
+        toLimitLabel.textContent = 'Limit T/O';
+        ldgLimitLabel.textContent = 'Limit LDG';
+
         // Поля для сброса
         const fieldsToClear = [
             document.getElementById('longitudinal_component'),
@@ -452,23 +461,31 @@ document.addEventListener('DOMContentLoaded', () => {
         // Проверяем боковую составляющую против взлетных ограничений
         if (lateralComponentValue >= toHalfLimit && lateralComponentValue < to80Limit) {
             updateFieldClass(toLimitField, 1);
+            toLimitLabel.textContent = 'Limit T/O (≥ 50%)';
         } else if (lateralComponentValue >= to80Limit && lateralComponentValue < toFullLimit) {
             updateFieldClass(toLimitField, 2);
+            toLimitLabel.textContent = 'Limit T/O (≥ 80%)';
         } else if (lateralComponentValue >= toFullLimit) {
             updateFieldClass(toLimitField, 3);
+            toLimitLabel.textContent = 'Limit T/O (≥ 100%)';
         } else {
             updateFieldClass(toLimitField, 0);
+            toLimitLabel.textContent = 'Limit T/O';
         }
 
         // Проверяем боковую составляющую против посадочных ограничений
         if (lateralComponentValue >= ldgHalfLimit && lateralComponentValue < ldg80Limit) {
             updateFieldClass(ldgLimitField, 1);
+            ldgLimitLabel.textContent = 'Limit LDG (≥ 50%)';
         } else if (lateralComponentValue >= ldg80Limit && lateralComponentValue < ldgFullLimit) {
             updateFieldClass(ldgLimitField, 2);
+            ldgLimitLabel.textContent = 'Limit LDG (≥ 80%)';
         } else if (lateralComponentValue >= ldgFullLimit) {
             updateFieldClass(ldgLimitField, 3);
+            ldgLimitLabel.textContent = 'Limit LDG (≥ 100%)';
         } else {
             updateFieldClass(ldgLimitField, 0);
+            ldgLimitLabel.textContent = 'Limit LDG';
         }
 
         // Проверяем продольную составляющую
