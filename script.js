@@ -458,34 +458,32 @@ document.addEventListener('DOMContentLoaded', () => {
         const toLimitText = toLimitField.value;
         const ldgLimitText = ldgLimitField.value;
 
+        const toPercentage = Math.round(lateralComponentValue / toFullLimit * 100);
+        toLimitLabel.textContent = `Limit T/O (${toPercentage}%)`;
+
         // Проверяем боковую составляющую против взлетных ограничений
         if (lateralComponentValue >= toHalfLimit && lateralComponentValue < to80Limit) {
             updateFieldClass(toLimitField, 1);
-            toLimitLabel.textContent = 'Limit T/O (≥ 50%)';
         } else if (lateralComponentValue >= to80Limit && lateralComponentValue < toFullLimit) {
             updateFieldClass(toLimitField, 2);
-            toLimitLabel.textContent = 'Limit T/O (≥ 80%)';
         } else if (lateralComponentValue >= toFullLimit) {
             updateFieldClass(toLimitField, 3);
-            toLimitLabel.textContent = 'Limit T/O (≥ 100%)';
         } else {
             updateFieldClass(toLimitField, 0);
-            toLimitLabel.textContent = 'Limit T/O';
         }
+
+        const ldgPercentage = Math.round(lateralComponentValue / ldgFullLimit * 100);
+        ldgLimitLabel.textContent = `Limit LDG (${ldgPercentage}%)`;
 
         // Проверяем боковую составляющую против посадочных ограничений
         if (lateralComponentValue >= ldgHalfLimit && lateralComponentValue < ldg80Limit) {
             updateFieldClass(ldgLimitField, 1);
-            ldgLimitLabel.textContent = 'Limit LDG (≥ 50%)';
         } else if (lateralComponentValue >= ldg80Limit && lateralComponentValue < ldgFullLimit) {
             updateFieldClass(ldgLimitField, 2);
-            ldgLimitLabel.textContent = 'Limit LDG (≥ 80%)';
         } else if (lateralComponentValue >= ldgFullLimit) {
             updateFieldClass(ldgLimitField, 3);
-            ldgLimitLabel.textContent = 'Limit LDG (≥ 100%)';
         } else {
             updateFieldClass(ldgLimitField, 0);
-            ldgLimitLabel.textContent = 'Limit LDG';
         }
 
         // Проверяем продольную составляющую

@@ -11,7 +11,9 @@ const CACHE_URLS = [
   "/pics/action_table.png",
   "/pics/action_table_dark.png",
   "/pics/coeff_table.png",
-  "/pics/coeff_table_dark.png"
+  "/pics/coeff_table_dark.png",
+  "/pics/info.png",
+  "/pics/info_dark.png"
 ];
 
 // Устанавливаем Service Worker и кэшируем файлы
