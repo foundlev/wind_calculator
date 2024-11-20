@@ -365,37 +365,62 @@ body {
     color: #ffffff; /* Белый текст */
 }
 
-/* Настройки для тёмной темы */
-@media (prefers-color-scheme: dark) {
-    .field input[type="text"].level-0,
-    .field select.level-0 {
-        background-color: #218838; /* Темно-зелёный */
-    }
-
-    .field input[type="text"].level-1,
-    .field select.level-1 {
-        background-color: #e0a800; /* Темно-жёлтый */
-    }
-
-    .field input[type="text"].level-2,
-    .field select.level-2 {
-        background-color: #e8590c; /* Темно-оранжевый */
-    }
-
-    .field input[type="text"].level-3,
-    .field select.level-3 {
-        background-color: #c82333; /* Тёмно-красный */
-    }
+/* Help overlay styles */
+.help-overlay {
+    display: none; /* Скрыто по умолчанию */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8); /* Полупрозрачный черный фон */
+    z-index: 1000; /* Высокий z-index для отображения поверх всего */
+    display: flex; /* Используем flex для центрирования */
+    justify-content: center;
+    align-items: center;
 }
 
-@media (prefers-color-scheme: light) {
-    .image-container img[data-condition-visible="true"] {
-        content: url("pics/action_table.png");
-    }
+.help-overlay img {
+    width: 90%;
+    height: 90%;
+    object-fit: contain;
+}
 
-    .image-container img[data-condition-visible="false"] {
-        content: url("pics/coeff_table.png");
-    }
+.close-help {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 60px;
+    background: none;
+    border: none;
+    color: #fff;
+    cursor: pointer;
+    z-index: 1001;
+}
+
+.close-help i {
+    pointer-events: none;
+}
+
+/* Стили для текста с предупреждением */
+.disclaimer {
+    font-size: 20px;
+    text-align: left;
+    opacity: 0.4;
+    margin-top: 10px;
+}
+
+
+.image-container img[data-condition-visible="true"] {
+    content: url("pics/action_table.png");
+}
+
+.image-container img[data-condition-visible="false"] {
+    content: url("pics/coeff_table.png");
+}
+
+.help-overlay img {
+    content: url("pics/info.png");
 }
 
 /* Темная тема */
@@ -495,5 +520,29 @@ body {
 
     .keyboard-buttons .key:active {
         background-color: #666;
+    }
+
+    .field input[type="text"].level-0,
+    .field select.level-0 {
+        background-color: #218838; /* Темно-зелёный */
+    }
+
+    .field input[type="text"].level-1,
+    .field select.level-1 {
+        background-color: #e0a800; /* Темно-жёлтый */
+    }
+
+    .field input[type="text"].level-2,
+    .field select.level-2 {
+        background-color: #e8590c; /* Темно-оранжевый */
+    }
+
+    .field input[type="text"].level-3,
+    .field select.level-3 {
+        background-color: #c82333; /* Тёмно-красный */
+    }
+
+    .help-overlay img {
+        content: url("pics/info_dark.png");
     }
 }

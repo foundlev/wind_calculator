@@ -705,3 +705,19 @@ document.addEventListener('DOMContentLoaded', () => {
     // Загружаем состояние при старте
     loadGesturesState();
 });
+
+document.addEventListener('DOMContentLoaded', () => {
+    // Функциональность кнопки "Помощь"
+    const helpButton = document.getElementById('help');
+    const helpOverlay = document.getElementById('help-overlay');
+    const closeHelpButton = document.getElementById('close-help');
+
+    helpButton.addEventListener('click', () => {
+        helpOverlay.style.display = 'flex';
+    });
+
+    closeHelpButton.addEventListener('click', () => {
+        helpOverlay.style.display = 'none';
+    });
+});
+
