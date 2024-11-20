@@ -487,6 +487,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const upArrow = document.getElementById('arrow-up');
     const downArrow = document.getElementById('arrow-down');
 
+    const runwayCondition = document.getElementById("runway_condition");
+    const imageElement = document.querySelector(".image-container img");
+
+    // Объект для хранения положений изображений
+    let imagePositions = {
+        'image1': { scale: 1, currentX: 0, currentY: 0 },
+        'image2': { scale: 1, currentX: 0, currentY: 0 }
+    };
+
     let scale = 1;
     let currentX = 0;
     let currentY = 0;
@@ -503,6 +512,33 @@ document.addEventListener('DOMContentLoaded', () => {
         return Math.sqrt(dx * dx + dy * dy);
     }
 
+    // Загрузка положений из localStorage
+    const savedPositions = localStorage.getItem('imagePositions');
+    if (savedPositions) {
+        imagePositions = JSON.parse(savedPositions);
+    }
+
+    // Функция для сохранения положений в localStorage
+    function saveImagePositions() {
+        localStorage.setItem('imagePositions', JSON.stringify(imagePositions));
+    }
+
+    // Функция для определения текущей картинки
+    function getCurrentImageKey() {
+        const isImage1 = img.getAttribute('data-condition-visible') === 'true';
+        return isImage1 ? 'image1' : 'image2';
+    }
+
+    // Функция для применения сохранённого положения к текущему изображению
+    function applyImagePosition() {
+        const key = getCurrentImageKey();
+        const pos = imagePositions[key];
+        scale = pos.scale;
+        currentX = pos.currentX;
+        currentY = pos.currentY;
+        img.style.transform = `scale(${scale}) translate(${currentX}px, ${currentY}px)`;
+    }
+
     // Функция для обработки touchmove
     imageContainer.addEventListener('touchmove', (event) => {
         if (!gesturesEnabled) { return }
@@ -516,6 +552,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 const delta = distance - lastTouchDistance;
                 scale = Math.min(Math.max(scale + delta / 300, 0.5), 5); // Ограничение масштаба
                 img.style.transform = `scale(${scale}) translate(${currentX}px, ${currentY}px)`;
+
+                // Сохраняем положение
+                const key = getCurrentImageKey();
+                imagePositions[key].scale = scale;
+                saveImagePositions();
             }
 
             lastTouchDistance = distance;
@@ -533,12 +574,19 @@ document.addEventListener('DOMContentLoaded', () => {
             lastY = touch.clientY;
 
             img.style.transform = `scale(${scale}) translate(${currentX}px, ${currentY}px)`;
+
+            // Сохраняем положение
+            const key = getCurrentImageKey();
+            imagePositions[key].currentX = currentX;
+            imagePositions[key].currentY = currentY;
+            saveImagePositions();
         }
     });
 
     // Функция для обработки touchstart
     imageContainer.addEventListener('touchstart', (event) => {
         if (!gesturesEnabled) { return }
+
         if (event.touches.length === 1) {
             // Начало перетаскивания
             isDragging = true;
@@ -561,39 +609,66 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Обработчик кнопки сброса
     resetButton.addEventListener('click', () => {
-        scale = 1;
-        currentX = 0;
-        currentY = 0;
-        img.style.transform = `scale(${scale}) translate(${currentX}px, ${currentY}px)`;
+        const key = getCurrentImageKey();
+        // Сбрасываем положение только для текущей картинки
+        imagePositions[key] = { scale: 1, currentX: 0, currentY: 0 };
+        saveImagePositions();
+
+        // Применяем сброшенное положение
+        applyImagePosition();
     });
 
     // Обработчики для стрелок
     downArrow.addEventListener('click', () => {
         currentY -= step;
         img.style.transform = `translateY(${currentY}px)`;
+
+        // Сохраняем положение
+        const key = getCurrentImageKey();
+        imagePositions[key].currentY = currentY;
+        saveImagePositions();
     });
 
     upArrow.addEventListener('click', () => {
         currentY += step;
         img.style.transform = `translateY(${currentY}px)`;
-    });
-});
 
-document.addEventListener("DOMContentLoaded", () => {
-    const runwayCondition = document.getElementById("runway_condition");
-    const imageElement = document.querySelector(".image-container img");
+        // Сохраняем положение
+        const key = getCurrentImageKey();
+        imagePositions[key].currentY = currentY;
+        saveImagePositions();
+    });
 
     const updateImageVisibility = () => {
         const isVisible = !runwayCondition.parentElement.classList.contains("hidden");
         imageElement.setAttribute("data-condition-visible", isVisible);
-    };
 
-    // Обновляем изображение при загрузке
-    updateImageVisibility();
+        // После изменения изображения применяем положение
+        applyImagePosition();
+    };
 
     // Слушаем события изменения состояния поля
     const toggleButton = document.getElementById("toggle_button");
     toggleButton.addEventListener("click", updateImageVisibility);
+
+    // Слушаем изменения темы (тёмная/светлая)
+    const darkModeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    if (darkModeMediaQuery.addEventListener) {
+        darkModeMediaQuery.addEventListener('change', () => {
+            updateImageVisibility();
+        });
+    } else if (darkModeMediaQuery.addListener) {
+        // Для более старых браузеров
+        darkModeMediaQuery.addListener(() => {
+            updateImageVisibility();
+        });
+    }
+
+    // Обновляем изображение при загрузке
+    updateImageVisibility();
+
+    // Применяем положение при загрузке страницы
+    applyImagePosition();
 });
 
 document.addEventListener('DOMContentLoaded', () => {
