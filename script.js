@@ -1,6 +1,51 @@
 let gesturesEnabled = true; // По умолчанию жесты включены
 
+// Функция для предзагрузки изображений
+function preloadImages(imageUrls) {
+    const promises = [];
+
+    imageUrls.forEach((url) => {
+        promises.push(
+            new Promise((resolve, reject) => {
+                const img = new Image();
+                img.src = url;
+                img.onload = resolve;
+                img.onerror = reject;
+            })
+        );
+    });
+
+    return Promise.all(promises);
+}
+
 document.addEventListener('DOMContentLoaded', () => {
+    // Показать экран загрузки
+    const loadingScreen = document.getElementById('loading-screen');
+    loadingScreen.style.display = 'flex';
+
+    // Список изображений для предзагрузки
+    const imageUrls = [
+        'pics/action_table.png',
+        'pics/action_table_dark.png',
+        'pics/coeff_table.png',
+        'pics/coeff_table_dark.png',
+        'pics/info.png',
+        'pics/info_dark.png',
+        // Добавьте сюда другие изображения, если они есть
+    ];
+
+    // Предзагрузка изображений
+    preloadImages(imageUrls)
+        .then(() => {
+            // Скрыть экран загрузки после загрузки всех изображений
+            loadingScreen.style.display = 'none';
+        })
+        .catch((error) => {
+            console.error('Ошибка предзагрузки изображений:', error);
+            // Даже в случае ошибки скрываем экран загрузки
+            loadingScreen.style.display = 'none';
+        });
+
     const fields = document.querySelectorAll('.field input[type="text"], .field select');
     const keyboardKeys = document.querySelectorAll('.key');
     const calculateButton = document.getElementById('calculate_button');
@@ -668,33 +713,19 @@ document.addEventListener('DOMContentLoaded', () => {
         applyImagePosition();
     };
 
-    // Слушаем события изменения состояния поля
-    const toggleButton = document.getElementById("toggle_button");
-    toggleButton.addEventListener("click", updateImageVisibility);
+    // Функциональность кнопки "Помощь"
+    const helpButton = document.getElementById('help');
+    const helpOverlay = document.getElementById('help-overlay');
+    const closeHelpButton = document.getElementById('close-help');
 
-    // Слушаем изменения темы (тёмная/светлая)
-    const darkModeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-    if (darkModeMediaQuery.addEventListener) {
-        darkModeMediaQuery.addEventListener('change', () => {
-            updateImageVisibility();
-        });
-    } else if (darkModeMediaQuery.addListener) {
-        // Для более старых браузеров
-        darkModeMediaQuery.addListener(() => {
-            updateImageVisibility();
-        });
-    }
+    helpButton.addEventListener('click', () => {
+        helpOverlay.style.display = 'flex';
+    });
 
-    // Обновляем изображение при загрузке
-    updateImageVisibility();
-
-    // Применяем положение при загрузке страницы
-    applyImagePosition();
-});
-
-document.addEventListener('DOMContentLoaded', () => {
+    closeHelpButton.addEventListener('click', () => {
+        helpOverlay.style.display = 'none';
+    });
     const blockButton = document.getElementById('block_button');
-    const imageContainer = document.querySelector('.image-container');
 
     // Функция для сохранения состояния в localStorage
     const saveGesturesState = () => {
@@ -723,22 +754,29 @@ document.addEventListener('DOMContentLoaded', () => {
         saveGesturesState(); // Сохраняем состояние
     });
 
+    // Слушаем события изменения состояния поля
+    const toggleButton = document.getElementById("toggle_button");
+    toggleButton.addEventListener("click", updateImageVisibility);
+
+    // Слушаем изменения темы (тёмная/светлая)
+    const darkModeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    if (darkModeMediaQuery.addEventListener) {
+        darkModeMediaQuery.addEventListener('change', () => {
+            updateImageVisibility();
+        });
+    } else if (darkModeMediaQuery.addListener) {
+        // Для более старых браузеров
+        darkModeMediaQuery.addListener(() => {
+            updateImageVisibility();
+        });
+    }
+
     // Загружаем состояние при старте
     loadGesturesState();
+
+    // Обновляем изображение при загрузке
+    updateImageVisibility();
+
+    // Применяем положение при загрузке страницы
+    applyImagePosition();
 });
-
-document.addEventListener('DOMContentLoaded', () => {
-    // Функциональность кнопки "Помощь"
-    const helpButton = document.getElementById('help');
-    const helpOverlay = document.getElementById('help-overlay');
-    const closeHelpButton = document.getElementById('close-help');
-
-    helpButton.addEventListener('click', () => {
-        helpOverlay.style.display = 'flex';
-    });
-
-    closeHelpButton.addEventListener('click', () => {
-        helpOverlay.style.display = 'none';
-    });
-});
-
