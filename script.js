@@ -4,6 +4,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const fields = document.querySelectorAll('.field input[type="text"], .field select');
     const keyboardKeys = document.querySelectorAll('.key');
     const calculateButton = document.getElementById('calculate_button');
+    const toLimitField = document.getElementById('to_limit');
+    const ldgLimitField = document.getElementById('ldg_limit');
+    const longitudinalComponentField = document.getElementById('longitudinal_component');
+    const lateralComponentField = document.getElementById('lateral_component');
+
     let activeField = null;
 
     const levelClasses = ['level-0', 'level-1', 'level-2', 'level-3'];
@@ -22,7 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
         'runway': 36,
         'runway_course': 360,
         'wind_direction': 360,
-        'wind_speed': 99, // предполагается, что максимальное значение для скорости ветра не более 99
+        'wind_speed': 99,
         'friction_coeff': 99
     };
 
@@ -179,6 +184,7 @@ document.addEventListener('DOMContentLoaded', () => {
         key.addEventListener('click', () => {
             if (!activeField) return;
             clearCalculations();
+
             const keyValue = key.textContent.trim();
             const fieldId = activeField.id;
             const maxLength = inputFields[fieldId];
@@ -207,8 +213,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 // Проверка максимального значения
                 let numericValue = parseInt(currentValue, 10);
+                console.log(currentValue);
                 if (maxValue !== null && !isNaN(numericValue) && numericValue > maxValue) {
-                    return; // Превышено максимальное значение
+                    // Заменяем первую цифру на нуль в строке currentValue.
+                    currentValue = '0' + currentValue.slice(1);
                 }
 
                 activeField.value = padValue(currentValue, maxLength);
@@ -308,10 +316,12 @@ document.addEventListener('DOMContentLoaded', () => {
     function resetBackgrounds(...fields) {
         fields.forEach(field => {
             field.classList.remove(...levelClasses);
+            field.style.cssText = '';
         });
     }
     // Функция для очистки полей вычислений
     function clearCalculations() {
+        resetBackgrounds(toLimitField, ldgLimitField, longitudinalComponentField);
         // Поля для сброса
         const fieldsToClear = [
             document.getElementById('longitudinal_component'),
@@ -334,8 +344,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     calculateButton.addEventListener('click', () => {
         const speedUnit = document.getElementById('speed_unit').value.toLowerCase(); // kts или mps
-        const toLimitField = document.getElementById('to_limit');
-        const ldgLimitField = document.getElementById('ldg_limit');
 
         const runwayConditionField = document.getElementById('runway_condition');
         const coeffMode = document.getElementById('coeff-mode');
@@ -406,8 +414,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const runwayCourse = parseFloat(document.getElementById('runway_course').value) || 0; // Курс ВПП в градусах
         const windDirection = parseFloat(document.getElementById('wind_direction').value) || 0; // Направление ветра в градусах
         const windSpeed = parseFloat(document.getElementById('wind_speed').value) || 0; // Скорость ветра
-        const longitudinalComponentField = document.getElementById('longitudinal_component');
-        const lateralComponentField = document.getElementById('lateral_component');
 
         // Рассчитываем углы
         const windAngle = ((windDirection - runwayCourse + 360) % 360) * (Math.PI / 180); // В радианах
