@@ -254,16 +254,8 @@ body {
     z-index: 10; /* Убедимся, что кнопка сброса над изображением */
 }
 
-.reset-button:hover {
-    background-color: rgba(0, 0, 0, 0.7);
-}
-
 .block-button {
     top: 60px; /* Располагаем под кнопкой сброса */
-}
-
-.block-button:hover {
-    background-color: rgba(0, 0, 0, 0.7);
 }
 
 .block-button:active {
@@ -297,10 +289,6 @@ body {
     transition: background-color 0.3s;
 }
 
-.arrow-btn:hover {
-    background-color: rgba(0, 0, 0, 0.7);
-}
-
 .arrow-btn:active {
     background-color: rgba(0, 0, 0, 0.9);
 }
@@ -315,54 +303,88 @@ body {
     z-index: 1; /* Убедимся, что изображение под кнопками */
 }
 
-/* Темная тема */
-@media (prefers-color-scheme: dark) {
-    .block-button {
-        background-color: rgba(255, 255, 255, 0.5);
-        color: black;
-    }
-
-    .block-button:hover {
-        background-color: rgba(255, 255, 255, 0.7);
-    }
-
-    .block-button:active {
-        background-color: rgba(255, 255, 255, 0.9);
-    }
+/* Разделительная черта */
+.divider {
+    border-bottom: 1px solid #ccc;
+    margin: 20px 0;
 }
 
-/* Темная тема */
-@media (prefers-color-scheme: dark) {
-    .reset-button {
-        background-color: rgba(255, 255, 255, 0.5); /* Светлый фон для видимости */
-        color: black; /* Текст черного цвета */
-    }
-
-    .reset-button:hover {
-        background-color: rgba(255, 255, 255, 0.7); /* При наведении чуть светлее */
-    }
-
-    .arrow-btn {
-        background-color: rgba(255, 255, 255, 0.5); /* Светлый фон для стрелок */
-        color: black; /* Текст черного цвета */
-    }
-
-    .arrow-btn:hover {
-        background-color: rgba(255, 255, 255, 0.7); /* При наведении чуть светлее */
-    }
-
-    .arrow-btn:active {
-        background-color: rgba(255, 255, 255, 0.9); /* При нажатии почти белый */
-    }
+/* Блок дополнительных кнопок */
+.keyboard-buttons {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
+.keyboard-buttons .key-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.keyboard-buttons .key {
+    flex: 1;
+    margin: 0 5px;
+    padding: 20px;
+    font-size: 24px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #ddd;
+    cursor: pointer;
+    transition: background-color 0.1s, transform 0.1s;
+    user-select: none;
+}
+
+.keyboard-buttons .key:active {
+    background-color: #bbb;
+    transform: scale(0.98);
+}
+
+/* Стили для уровней */
+.field input[type="text"].level-0,
+.field select.level-0 {
+    background-color: #28a745; /* Зелёный */
+    color: #ffffff; /* Белый текст */
+}
+
+.field input[type="text"].level-1,
+.field select.level-1 {
+    background-color: #ffc107; /* Жёлтый */
+    color: #000000; /* Чёрный текст */
+}
+
+.field input[type="text"].level-2,
+.field select.level-2 {
+    background-color: #fd7e14; /* Оранжевый */
+    color: #ffffff; /* Белый текст */
+}
+
+.field input[type="text"].level-3,
+.field select.level-3 {
+    background-color: #dc3545; /* Красный */
+    color: #ffffff; /* Белый текст */
+}
+
+/* Настройки для тёмной темы */
 @media (prefers-color-scheme: dark) {
-    .image-container img[data-condition-visible="true"] {
-        content: url("pics/action_table_dark.png");
+    .field input[type="text"].level-0,
+    .field select.level-0 {
+        background-color: #218838; /* Темно-зелёный */
     }
 
-    .image-container img[data-condition-visible="false"] {
-        content: url("pics/coeff_table_dark.png");
+    .field input[type="text"].level-1,
+    .field select.level-1 {
+        background-color: #e0a800; /* Темно-жёлтый */
+    }
+
+    .field input[type="text"].level-2,
+    .field select.level-2 {
+        background-color: #e8590c; /* Темно-оранжевый */
+    }
+
+    .field input[type="text"].level-3,
+    .field select.level-3 {
+        background-color: #c82333; /* Тёмно-красный */
     }
 }
 
@@ -375,7 +397,6 @@ body {
         content: url("pics/coeff_table.png");
     }
 }
-
 
 /* Темная тема */
 @media (prefers-color-scheme: dark) {
@@ -433,5 +454,46 @@ body {
 
     .calculate-button:active {
         background-color: #1e7e34;
+    }
+
+    .image-container img[data-condition-visible="true"] {
+        content: url("pics/action_table_dark.png");
+    }
+
+    .image-container img[data-condition-visible="false"] {
+        content: url("pics/coeff_table_dark.png");
+    }
+
+    .reset-button {
+        background-color: rgba(255, 255, 255, 0.5); /* Светлый фон для видимости */
+        color: black; /* Текст черного цвета */
+    }
+
+    .arrow-btn {
+        background-color: rgba(255, 255, 255, 0.5); /* Светлый фон для стрелок */
+        color: black; /* Текст черного цвета */
+    }
+
+    .arrow-btn:active {
+        background-color: rgba(255, 255, 255, 0.9); /* При нажатии почти белый */
+    }
+
+    .block-button {
+        background-color: rgba(255, 255, 255, 0.5);
+        color: black;
+    }
+
+    .block-button:active {
+        background-color: rgba(255, 255, 255, 0.9);
+    }
+
+    .keyboard-buttons .key {
+        background-color: #444;
+        border-color: #666;
+        color: #eee;
+    }
+
+    .keyboard-buttons .key:active {
+        background-color: #666;
     }
 }

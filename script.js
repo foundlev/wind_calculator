@@ -6,6 +6,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const calculateButton = document.getElementById('calculate_button');
     let activeField = null;
 
+    const levelClasses = ['level-0', 'level-1', 'level-2', 'level-3'];
+
     // Поля, на которые можно вводить данные с клавиатуры
     const inputFields = {
         'runway': 2,
@@ -305,11 +307,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // Функция для сброса цвета фона
     function resetBackgrounds(...fields) {
         fields.forEach(field => {
-            field.style.backgroundColor = "";
-            field.style.color = "";
+            field.classList.remove(...levelClasses);
         });
     }
-
     // Функция для очистки полей вычислений
     function clearCalculations() {
         // Поля для сброса
@@ -322,10 +322,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Сбрасываем значения и очищаем стили
         fieldsToClear.forEach(field => {
-            field.value = "---"; // Устанавливаем значение по умолчанию
-            field.style.backgroundColor = ""; // Сбрасываем цвет фона
-            field.style.color = ""; // Сбрасываем цвет текста
+            field.value = "---";
+            field.classList.remove(...levelClasses);
         });
+    }
+
+    function updateFieldClass(field, level) {
+        field.classList.remove(...levelClasses);
+        field.classList.add(`level-${level}`);
     }
 
     calculateButton.addEventListener('click', () => {
@@ -339,8 +343,11 @@ document.addEventListener('DOMContentLoaded', () => {
         const measureTypeField = document.getElementById('measure_type');
 
         let toFullLimit = null;
+        let to80Limit = null;
         let toHalfLimit = null;
+
         let ldgFullLimit = null;
+        let ldg80Limit = null;
         let ldgHalfLimit = null;
 
         // Проверяем, какое поле активно: состояние ВПП или коэффициент сцепления
@@ -353,17 +360,15 @@ document.addEventListener('DOMContentLoaded', () => {
             const landingLimits = reportedBrakingActions["landing"][runwayCondition];
 
             // Форматируем и выводим значения
-            const toLimitValue = speedUnit === "mps" ? takeoffLimits["mps"] : takeoffLimits["kts"];
-            const toHalfValue = Math.round((toLimitValue / 2) * 10 - 1) / 10; // Округляем до 1 знака
-            toFullLimit = toLimitValue;
-            toHalfLimit = toHalfValue;
-            toLimitField.value = `${toLimitValue} ${speedUnit.toUpperCase()}`;
+            toFullLimit = speedUnit === "mps" ? takeoffLimits["mps"] : takeoffLimits["kts"];
+            to80Limit = Math.round((toFullLimit * 0.8) * 10 - 1) / 10; // Округляем до 1 знака
+            toHalfLimit = Math.round((toFullLimit / 2) * 10 - 1) / 10; // Округляем до 1 знака
+            toLimitField.value = `${toFullLimit} ${speedUnit.toUpperCase()}`;
 
-            const ldgLimitValue = speedUnit === "mps" ? landingLimits["mps"] : landingLimits["kts"];
-            const ldgHalfValue = Math.round((ldgLimitValue / 2) * 10 - 1) / 10; // Округляем до 1 знака
-            ldgFullLimit = ldgLimitValue;
-            ldgHalfLimit = ldgHalfValue;
-            ldgLimitField.value = `${ldgLimitValue} ${speedUnit.toUpperCase()}`;
+            ldgFullLimit = speedUnit === "mps" ? landingLimits["mps"] : landingLimits["kts"];
+            ldg80Limit = Math.round((ldgFullLimit * 0.8) * 10 - 1) / 10; // Округляем до 1 знака
+            ldgHalfLimit = Math.round((ldgFullLimit / 2) * 10 - 1) / 10; // Округляем до 1 знака
+            ldgLimitField.value = `${ldgFullLimit} ${speedUnit.toUpperCase()}`;
         } else if (!frictionCoeffField.classList.contains('hidden')) {
             // Берем коэффициент сцепления и тип измерения
             const frictionCoeff = parseFloat(frictionCoeffField.value) / 100; // Переводим в десятичное число
@@ -387,19 +392,15 @@ document.addEventListener('DOMContentLoaded', () => {
             const landingLimit = getLimit(landingKeys, frictionCoeff, brakingActions["landing"]);
 
             // Форматируем и выводим значения
-            const toLimitValue = speedUnit === "mps" ? takeoffLimit["mps"] : takeoffLimit["kts"];
-            const toHalfValue = Math.round((toLimitValue / 2) * 10 - 1) / 10; // Округляем до 1 знака
-            toLimitField.value = `${toLimitValue} ${speedUnit.toUpperCase()}`;
+            toFullLimit = speedUnit === "mps" ? takeoffLimit["mps"] : takeoffLimit["kts"];
+            to80Limit = Math.round((toFullLimit * 0.8) * 10 - 1) / 10; // Округляем до 1 знака
+            toHalfLimit = Math.round((toFullLimit / 2) * 10 - 1) / 10; // Округляем до 1 знака
+            toLimitField.value = `${toFullLimit} ${speedUnit.toUpperCase()}`;
 
-            toFullLimit = toLimitValue;
-            toHalfLimit = toHalfValue;
-
-            const ldgLimitValue = speedUnit === "mps" ? landingLimit["mps"] : landingLimit["kts"];
-            const ldgHalfValue = Math.round((ldgLimitValue / 2) * 10 - 1) / 10; // Округляем до 1 знака
-            ldgLimitField.value = `${ldgLimitValue} ${speedUnit.toUpperCase()}`;
-
-            ldgFullLimit = ldgLimitValue;
-            ldgHalfLimit = ldgHalfValue;
+            ldgFullLimit = speedUnit === "mps" ? landingLimit["mps"] : landingLimit["kts"];
+            ldg80Limit = Math.round((ldgFullLimit * 0.8) * 10 - 1) / 10; // Округляем до 1 знака
+            ldgHalfLimit = Math.round((ldgFullLimit / 2) * 10 - 1) / 10; // Округляем до 1 знака
+            ldgLimitField.value = `${ldgFullLimit} ${speedUnit.toUpperCase()}`;
         }
 
         const runwayCourse = parseFloat(document.getElementById('runway_course').value) || 0; // Курс ВПП в градусах
@@ -443,27 +444,25 @@ document.addEventListener('DOMContentLoaded', () => {
         const ldgLimitText = ldgLimitField.value;
 
         // Проверяем боковую составляющую против взлетных ограничений
-        if (lateralComponentValue >= toHalfLimit && lateralComponentValue < toFullLimit) {
-            toLimitField.style.backgroundColor = "orange";
-            toLimitField.style.color = "black";
+        if (lateralComponentValue >= toHalfLimit && lateralComponentValue < to80Limit) {
+            updateFieldClass(toLimitField, 1);
+        } else if (lateralComponentValue >= to80Limit && lateralComponentValue < toFullLimit) {
+            updateFieldClass(toLimitField, 2);
         } else if (lateralComponentValue >= toFullLimit) {
-            toLimitField.style.backgroundColor = "red";
-            toLimitField.style.color = "white";
+            updateFieldClass(toLimitField, 3);
         } else {
-            toLimitField.style.backgroundColor = "green";
-            toLimitField.style.color = "white";
+            updateFieldClass(toLimitField, 0);
         }
 
         // Проверяем боковую составляющую против посадочных ограничений
-        if (lateralComponentValue >= ldgHalfLimit && lateralComponentValue < ldgFullLimit) {
-            ldgLimitField.style.backgroundColor = "orange";
-            ldgLimitField.style.color = "black";
+        if (lateralComponentValue >= ldgHalfLimit && lateralComponentValue < ldg80Limit) {
+            updateFieldClass(ldgLimitField, 1);
+        } else if (lateralComponentValue >= ldg80Limit && lateralComponentValue < ldgFullLimit) {
+            updateFieldClass(ldgLimitField, 2);
         } else if (lateralComponentValue >= ldgFullLimit) {
-            ldgLimitField.style.backgroundColor = "red";
-            ldgLimitField.style.color = "white";
+            updateFieldClass(ldgLimitField, 3);
         } else {
-            ldgLimitField.style.backgroundColor = "green";
-            ldgLimitField.style.color = "white";
+            updateFieldClass(ldgLimitField, 0);
         }
 
         // Проверяем продольную составляющую
@@ -485,8 +484,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const img = imageContainer.querySelector('img');
     const resetButton = document.getElementById('reset_button');
 
-    const upArrow = document.querySelector('.arrow-btn.up');
-    const downArrow = document.querySelector('.arrow-btn.down');
+    const upArrow = document.getElementById('arrow-up');
+    const downArrow = document.getElementById('arrow-down');
 
     let scale = 1;
     let currentX = 0;
@@ -617,7 +616,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Функция для обновления состояния
     const updateGesturesState = () => {
-        blockButton.textContent = gesturesEnabled ? 'Блок' : 'Разблок';
+        blockButton.innerHTML = gesturesEnabled ? '<i class="fas fa-unlock-alt"></i>' : '<i class="fas fa-lock"></i>';
 //        imageContainer.style.pointerEvents = gesturesEnabled ? 'auto' : 'none';
     };
 
