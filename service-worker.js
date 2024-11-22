@@ -16,8 +16,8 @@ const CACHE_URLS = [
   "/pics/info_dark.png"
 ];
 
-// Устанавливаем время жизни кэша в миллисекундах (20 часов) 20 * 60 * 60 * 1000
-const CACHE_DURATION = 5 * 1000;
+// Устанавливаем время жизни кэша в миллисекундах (20 часов)
+const CACHE_DURATION = 20 * 60 * 60 * 1000;
 
 // Устанавливаем Service Worker и кэшируем файлы
 self.addEventListener("install", event => {
