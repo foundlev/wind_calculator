@@ -18,8 +18,6 @@ function preloadImages(imageUrls) {
     return Promise.all(promises);
 }
 
-
-
 document.addEventListener('DOMContentLoaded', () => {
 //    const loadingScreen = document.getElementById('loading-screen');
 //    loadingScreen.style.display = 'flex';
@@ -815,4 +813,40 @@ document.addEventListener('DOMContentLoaded', () => {
             versionModal.style.display = 'none';
         }
     });
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+    // Функциональность для кнопки "Обновить"
+    const updateButton = document.getElementById('update-modal');
+
+    updateButton.addEventListener('click', () => {
+        if (navigator.onLine) {
+            // Если есть интернет, обновляем страницу
+            location.reload(true); // Параметр 'true' форсирует перезагрузку с сервера
+        } else {
+            // Если нет интернета, отображаем предупреждение
+            showOfflineWarning();
+        }
+    });
+
+    function showOfflineWarning() {
+        // Создаём элемент предупреждения, если его ещё нет
+        let offlineWarning = document.getElementById('offline-warning');
+        if (!offlineWarning) {
+            offlineWarning = document.createElement('div');
+            offlineWarning.id = 'offline-warning';
+            offlineWarning.className = 'offline-warning';
+            offlineWarning.textContent = 'Нет интернет соединения. Пожалуйста, проверьте ваше подключение.';
+            document.body.appendChild(offlineWarning);
+
+            // Скрываем предупреждение через несколько секунд
+            setTimeout(() => {
+                offlineWarning.classList.add('hide');
+                // Удаляем элемент после завершения анимации
+                offlineWarning.addEventListener('transitionend', () => {
+                    offlineWarning.remove();
+                });
+            }, 3000);
+        }
+    }
 });

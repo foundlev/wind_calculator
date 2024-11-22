@@ -1,4 +1,4 @@
-const CACHE_NAME = "wind-calculator-cache-v2";
+const CACHE_NAME = "wind-calculator-cache-v4";
 const CACHE_URLS = [
   "/",
   "/index.html",

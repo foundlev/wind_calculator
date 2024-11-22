@@ -475,7 +475,7 @@ body {
     background-color: #fefefe;
     margin: auto;
     margin-top: 15%; /* Настройте по необходимости */
-    padding: 20px;
+    padding: 20px 20px 10px 20px;
     border: 1px solid #888;
     width: 80%;
     max-width: 500px;
@@ -501,7 +501,7 @@ body {
     border-radius: 4px;
 }
 
-.modal-close-button {
+.modal-button {
     padding: 10px 20px;
     font-size: 18px;
     background-color: #ddd;
@@ -509,11 +509,42 @@ body {
     border-radius: 5px;
     cursor: pointer;
     width: 100%;
+    margin-bottom: 10px;
 }
 
-.modal-close-button:active {
+.modal-button.update-button {
+    background-color: #007BFF;
+    color: white;
+}
+
+.modal-button.update-button:active {
+    background-color: #0056b3;
+}
+
+.modal-button:active {
     background-color: #bbb;
     transform: scale(0.98);
+}
+
+/* Стили для предупреждения об отсутствии интернета */
+.offline-warning {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba(220, 53, 69, 0.9);
+    color: #fff;
+    padding: 15px 25px;
+    border-radius: 5px;
+    font-size: 18px;
+    z-index: 3000;
+    opacity: 1;
+    transition: opacity 0.5s ease-in-out;
+    text-align: center;
+}
+
+.offline-warning.hide {
+    opacity: 0;
 }
 
 /* Темная тема */
@@ -670,12 +701,26 @@ body {
         background-color: #444;
     }
 
-    .modal-close-button {
+    .modal-button {
         background-color: #444;
         color: white;
     }
 
-    .modal-close-button:active {
+    .modal-button:active {
         background-color: #666;
+    }
+
+    .modal-button.update-button {
+        background-color: #0056b3;
+        color: white;
+    }
+
+    .modal-button.update-button:active {
+        background-color: #003d80;
+    }
+
+    .offline-warning {
+        background-color: rgba(128, 29, 24, 0.9);
+        color: #fff;
     }
 }
