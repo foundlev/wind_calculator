@@ -18,10 +18,11 @@ function preloadImages(imageUrls) {
     return Promise.all(promises);
 }
 
+
+
 document.addEventListener('DOMContentLoaded', () => {
-    // Показать экран загрузки
-    const loadingScreen = document.getElementById('loading-screen');
-    loadingScreen.style.display = 'flex';
+//    const loadingScreen = document.getElementById('loading-screen');
+//    loadingScreen.style.display = 'flex';
 
     // Список изображений для предзагрузки
     const imageUrls = [
@@ -31,21 +32,22 @@ document.addEventListener('DOMContentLoaded', () => {
         'pics/coeff_table_dark.png',
         'pics/info.png',
         'pics/info_dark.png',
-        // Добавьте сюда другие изображения, если они есть
     ];
 
     // Предзагрузка изображений
-    preloadImages(imageUrls)
-        .then(() => {
-            // Скрыть экран загрузки после загрузки всех изображений
-            loadingScreen.style.display = 'none';
-        })
-        .catch((error) => {
-            console.error('Ошибка предзагрузки изображений:', error);
-            // Даже в случае ошибки скрываем экран загрузки
-            loadingScreen.style.display = 'none';
-        });
+    preloadImages(imageUrls);
+//        .then(() => {
+//            // Скрыть экран загрузки после загрузки всех изображений
+//            loadingScreen.style.display = 'none';
+//        })
+//        .catch((error) => {
+//            console.error('Ошибка предзагрузки изображений:', error);
+//            // Даже в случае ошибки скрываем экран загрузки
+//            loadingScreen.style.display = 'none';
+//        });
+});
 
+document.addEventListener('DOMContentLoaded', () => {
     const fields = document.querySelectorAll('.field input[type="text"], .field select');
     const keyboardKeys = document.querySelectorAll('.key');
     const calculateButton = document.getElementById('calculate_button');
@@ -779,4 +781,38 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Применяем положение при загрузке страницы
     applyImagePosition();
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+    // Загрузка информации о версии из info.json
+    fetch('info.json')
+        .then(response => response.json())
+        .then(data => {
+            const versionInfo = `Версия: <code>v${data.version}</code><br>Обновлено: <code>${data.updatedDate}</code>`;
+            document.getElementById('version-info').innerHTML = versionInfo;
+        })
+        .catch(error => {
+            console.error('Ошибка при загрузке версии:', error);
+            document.getElementById('version-info').textContent = 'Не удалось загрузить информацию о версии.';
+        });
+
+    // Функциональность модального окна версии
+    const infoButton = document.getElementById('info-version');
+    const versionModal = document.getElementById('version-modal');
+    const closeVersionModal = document.getElementById('close-version-modal');
+
+    infoButton.addEventListener('click', () => {
+        versionModal.style.display = 'block';
+    });
+
+    closeVersionModal.addEventListener('click', () => {
+        versionModal.style.display = 'none';
+    });
+
+    // Закрытие модального окна при клике вне его
+    window.addEventListener('click', (event) => {
+        if (event.target == versionModal) {
+            versionModal.style.display = 'none';
+        }
+    });
 });

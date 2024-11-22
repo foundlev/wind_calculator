@@ -458,19 +458,62 @@ body {
     color: #333;
 }
 
-/* Адаптация к тёмной теме */
-@media (prefers-color-scheme: dark) {
-    #loading-screen {
-        background-color: rgba(0, 0, 0, 0.9); /* Чёрный фон с прозрачностью */
-    }
+/* Modal Styles */
+.modal {
+    display: none; /* Скрыто по умолчанию */
+    position: fixed;
+    z-index: 3000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.4); /* Чёрный фон с прозрачностью */
+}
 
-    #loading-screen .loading-content i {
-        color: #eee;
-    }
+.modal-content {
+    background-color: #fefefe;
+    margin: auto;
+    margin-top: 15%; /* Настройте по необходимости */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 500px;
+    border-radius: 10px;
+    position: relative;
+    text-align: left; /* Центрируем текст */
+}
 
-    #loading-screen .loading-content p {
-        color: #eee;
-    }
+.modal-content h2 {
+    margin-top: 0;
+    font-size: 24px; /* Увеличиваем размер заголовка */
+}
+
+.modal-content p {
+    font-size: 22px; /* Увеличиваем размер текста */
+    line-height: 40px;
+}
+
+.modal-content code {
+    background-color: #f0f0f0;
+    padding: 2px 4px;
+    font-family: monospace;
+    border-radius: 4px;
+}
+
+.modal-close-button {
+    padding: 10px 20px;
+    font-size: 18px;
+    background-color: #ddd;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%;
+}
+
+.modal-close-button:active {
+    background-color: #bbb;
+    transform: scale(0.98);
 }
 
 /* Темная тема */
@@ -603,5 +646,36 @@ body {
 
     .divider {
         border-bottom: 1px solid #666;
+    }
+
+    #loading-screen {
+        background-color: rgba(0, 0, 0, 0.9); /* Чёрный фон с прозрачностью */
+    }
+
+    #loading-screen .loading-content i {
+        color: #eee;
+    }
+
+    #loading-screen .loading-content p {
+        color: #eee;
+    }
+
+    .modal-content {
+        background-color: #333;
+        color: #eee;
+        border-color: #555;
+    }
+
+    .modal-content code {
+        background-color: #444;
+    }
+
+    .modal-close-button {
+        background-color: #444;
+        color: white;
+    }
+
+    .modal-close-button:active {
+        background-color: #666;
     }
 }

@@ -159,7 +159,8 @@
                 <button class="key" id="arrow-down"><i class="fas fa-arrow-down"></i></button>
             </div>
             <div class="key-row last-row">
-                <button class="key" id="help">Помощь</button>
+                <button class="key" id="help"><i class="fa fa-book" aria-hidden="true"></i></button>
+                <button class="key" id="info-version"><i class="fa fa-refresh" aria-hidden="true"></i></i></button>
             </div>
         </div>
         <!-- Разделительная черта -->
@@ -176,12 +177,21 @@
     </div>
 </div>
 <!-- Loading Screen Overlay -->
-<div id="loading-screen">
+<div id="loading-screen" style="display: none;">
     <div class="loading-content">
         <i class="fas fa-spinner fa-spin"></i>
         <p>Загрузка...</p>
     </div>
 </div>
+<!-- Version Info Modal -->
+<div id="version-modal" class="modal" style="display: none;">
+    <div class="modal-content">
+        <h2>Информация о версии</h2>
+        <p id="version-info">Загрузка информации...</p>
+        <button id="close-version-modal" class="modal-close-button">Закрыть</button>
+    </div>
+</div>
+
 <script src="script.js"></script>
 <script>
     if ("serviceWorker" in navigator) {
