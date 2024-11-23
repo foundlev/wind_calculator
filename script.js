@@ -19,9 +19,6 @@ function preloadImages(imageUrls) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-//    const loadingScreen = document.getElementById('loading-screen');
-//    loadingScreen.style.display = 'flex';
-
     // Список изображений для предзагрузки
     const imageUrls = [
         'pics/action_table.png',
@@ -34,15 +31,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Предзагрузка изображений
     preloadImages(imageUrls);
-//        .then(() => {
-//            // Скрыть экран загрузки после загрузки всех изображений
-//            loadingScreen.style.display = 'none';
-//        })
-//        .catch((error) => {
-//            console.error('Ошибка предзагрузки изображений:', error);
-//            // Даже в случае ошибки скрываем экран загрузки
-//            loadingScreen.style.display = 'none';
-//        });
 });
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -236,17 +224,16 @@ document.addEventListener('DOMContentLoaded', () => {
             const fieldId = activeField.id;
             const maxLength = inputFields[fieldId];
             let maxValue = maxValues[fieldId];
-            const notClearCalculationsIds = ['reset_button', 'arrow-up', 'arrow-down', 'block_button', 'help']
-
-            clearCalculations();
 
             let currentValue = activeField.value.replace(/^0+/, '');
 
             if (key.id === 'clear_key') {
+                clearCalculations();
                 // Сброс поля
                 activeField.value = '0'.repeat(maxLength);
                 saveData(fieldId, '0'.repeat(maxLength));
             } else if (key.id === 'backspace_key') {
+                clearCalculations();
                 // Удаление последнего символа
                 currentValue = currentValue.slice(0, -1);
                 activeField.value = padValue(currentValue, maxLength);
@@ -255,6 +242,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Ввод цифры
                 const digit = keyValue;
                 if (!/^\d$/.test(digit)) return; // Только цифры
+                clearCalculations();
 
                 if (currentValue.length >= maxLength) {
                     currentValue = currentValue.substring(1);
@@ -263,7 +251,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 // Проверка максимального значения
                 let numericValue = parseInt(currentValue, 10);
-                console.log(currentValue);
                 if (maxValue !== null && !isNaN(numericValue) && numericValue > maxValue) {
                     // Заменяем первую цифру на нуль в строке currentValue.
                     currentValue = '0' + currentValue.slice(1);
@@ -412,6 +399,8 @@ document.addEventListener('DOMContentLoaded', () => {
         let ldg80Limit = null;
         let ldgHalfLimit = null;
 
+        let conditionsDict = {};
+
         // Проверяем, какое поле активно: состояние ВПП или коэффициент сцепления
         if (!coeffMode.classList.contains('hidden')) {
             // Берем значение состояния ВПП
@@ -431,6 +420,14 @@ document.addEventListener('DOMContentLoaded', () => {
             ldg80Limit = Math.round((ldgFullLimit * 0.8) * 10 - 1) / 10; // Округляем до 1 знака
             ldgHalfLimit = Math.round((ldgFullLimit / 2) * 10 - 1) / 10; // Округляем до 1 знака
             ldgLimitField.value = `${ldgFullLimit} ${speedUnit.toUpperCase()}`;
+
+            conditionsDict = {
+                runwayConditionType: "RBA",
+                runwayCondition: runwayCondition,
+                toLimit: toFullLimit,
+                ldgLimit: ldgFullLimit,
+                speedUnit: speedUnit
+            }
         } else if (!frictionCoeffField.classList.contains('hidden')) {
             // Берем коэффициент сцепления и тип измерения
             const frictionCoeff = parseFloat(frictionCoeffField.value) / 100; // Переводим в десятичное число
@@ -463,6 +460,15 @@ document.addEventListener('DOMContentLoaded', () => {
             ldg80Limit = Math.round((ldgFullLimit * 0.8) * 10 - 1) / 10; // Округляем до 1 знака
             ldgHalfLimit = Math.round((ldgFullLimit / 2) * 10 - 1) / 10; // Округляем до 1 знака
             ldgLimitField.value = `${ldgFullLimit} ${speedUnit.toUpperCase()}`;
+
+            conditionsDict = {
+                runwayConditionType: "FRC",
+                frictionCoeff: frictionCoeff,
+                measureType: measureType,
+                toLimit: toFullLimit,
+                ldgLimit: ldgFullLimit,
+                speedUnit: speedUnit
+            }
         }
 
         const runwayCourse = parseFloat(document.getElementById('runway_course').value) || 0; // Курс ВПП в градусах
@@ -539,6 +545,8 @@ document.addEventListener('DOMContentLoaded', () => {
             longitudinalComponentField.style.backgroundColor = "red";
             longitudinalComponentField.style.color = "white";
         }
+
+        logCalculation(runwayCourse, windDirection, windSpeed, longitudinalComponent, lateralComponent, conditionsDict)
     });
 
     // Загрузка данных при старте
@@ -850,3 +858,69 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 });
+
+function getTimestampInSeconds() {
+    return Math.floor(Date.now() / 1000);
+}
+
+// Функция для получения массива calculations из localStorage
+function getActions() {
+    let calculations = localStorage.getItem('actions');
+    if (calculations) {
+        return JSON.parse(calculations);
+    } else {
+        return [];
+    }
+}
+
+// Функция для сохранения массива calculations в localStorage
+function saveActions(actions) {
+    localStorage.setItem('actions', JSON.stringify(actions));
+}
+
+function addAction(newAction) {
+    let actions = getActions();
+    actions.push(newAction);
+    saveActions(actions);
+}
+
+// Функция для логирования нажатия кнопки
+function logCalculation(runwayCourse, windDirection, windSpeed, longitudinalComponent, lateralComponent, conditionsDict) {
+    const newAction = {
+        type: 'calculation',
+        data: {
+            runwayCourse: runwayCourse,
+            windDirection: windDirection,
+            windSpeed: windSpeed,
+            longitudinalComponent: longitudinalComponent,
+            lateralComponent: lateralComponent,
+            conditionsDict: conditionsDict
+        },
+        time: getTimestampInSeconds()
+    };
+
+    addAction(newAction);
+}
+
+function generateUID() {
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
+    let uid = '';
+    for (let i = 0; i < 6; i++) {
+        uid += characters.charAt(Math.floor(Math.random() * characters.length));
+    }
+    return uid;
+}
+
+// Функция для генерации буквенного 6-ми символьного UID и сохранения в localStorage
+function getUID() {
+    // Проверяем, сохранен ли уже UID в localStorage
+    let uid = localStorage.getItem('uid');
+    if (uid) {
+        return uid;
+    }
+
+    const newUid = generateUID();
+
+    localStorage.setItem('uid', newUid);
+    return newUid;
+}
