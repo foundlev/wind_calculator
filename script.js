@@ -924,3 +924,67 @@ function getUID() {
     localStorage.setItem('uid', newUid);
     return newUid;
 }
+
+function getDeviceInfo() {
+    const deviceInfo = {
+        // Информация о браузере
+        userAgent: navigator.userAgent,
+        platform: navigator.platform,
+        vendor: navigator.vendor,
+        timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+        localDate: new Date().toString(),
+    };
+    return deviceInfo;
+}
+
+function sendActionsToServer() {
+    // Получаем текущий timestamp
+    const currentTimestamp = getTimestampInSeconds();
+    // Получаем сохраненный timestamp
+    const savedTimestamp = parseInt(localStorage.getItem('last_send_timestamp'));
+    // Если прошло меньше 20 минут, то ничего не делаем.
+    if (currentTimestamp - savedTimestamp < 1200) {
+        return;
+    }
+
+    // Сохраняем текущий timestamp в localStorage
+    localStorage.setItem('last_send_timestamp', currentTimestamp.toString());
+
+    // Проверяем, есть ли подключение к интернету
+    if (navigator.onLine) {
+        // Проверяем, существует ли ключ 'actions' в localStorage
+        if (localStorage.getItem('actions')) {
+            const payload = {
+                actions: JSON.parse(localStorage.getItem('actions')),
+                deviceInfo: getDeviceInfo(),
+                uid: getUID()
+            }
+
+            // Отправляем POST-запрос на сервер
+            fetch('https://myapihelper.na4u.ru/wind_calc/api.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(payload)
+            })
+            .then(response => {
+                if (response.ok) {
+                    // Удаляем ключ 'actions' из localStorage
+                    localStorage.removeItem('actions');
+                } else {
+                    console.error('Ошибка сервера:', response.statusText);
+                }
+            })
+            .catch(error => {
+                console.error('Ошибка отправки данных:', error);
+            });
+        }
+    }
+}
+
+// Запускаем функцию каждые 5 минут (300,000 миллисекунд)
+setInterval(sendActionsToServer, 300000);
+
+// Запускаем функцию сразу при загрузке страницы
+sendActionsToServer();
