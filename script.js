@@ -573,7 +573,7 @@ document.addEventListener('DOMContentLoaded', () => {
         } else if (windAdditiveSpeed > 15) {
             windAdditiveSpeed = 15;
         }
-        windAdditiveLabel.textContent = `Steady: + ${windAdditiveSpeed} KTS`;
+        windAdditiveLabel.textContent = `Steady: + ${windAdditiveSpeed.toFixed(0)} KTS`;
 
         // Боковая составляющая
         const lateralComponent = Math.round(calcWind * Math.sin(windAngle) * 10) / 10; // Округляем до 1 знака
