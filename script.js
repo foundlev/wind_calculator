@@ -43,6 +43,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const lateralComponentField = document.getElementById('lateral_component');
     const windAdditiveField = document.getElementById('wind_additive');
 
+    const longitudinalComponentLabel = document.getElementById('longitudinal_component_label');
+    const lateralComponentLabel = document.getElementById('lateral_component_label');
+    const windAdditiveLabel = document.getElementById('wind_additive_label');
+
     const toLimitLabel = document.getElementById('to_limit_label');
     const ldgLimitLabel = document.getElementById('ldg_limit_label');
 
@@ -380,6 +384,10 @@ document.addEventListener('DOMContentLoaded', () => {
         toLimitLabel.textContent = 'Limit T/O';
         ldgLimitLabel.textContent = 'Limit LDG';
 
+        longitudinalComponentLabel.textContent = '---';
+        lateralComponentLabel.textContent = '---';
+        windAdditiveLabel.textContent = '---';
+
         // Поля для сброса
         const fieldsToClear = [
             document.getElementById('longitudinal_component'),
@@ -520,9 +528,15 @@ document.addEventListener('DOMContentLoaded', () => {
             ? `T ${Math.abs(longitudinalComponent)} ${speedUnit.toUpperCase()}`
             : "0";
 
+        // Постоянная продольная составляющая
         let longitudinalComponentSpeed = Math.round(windSpeed * Math.cos(windAngle) * 10) / 10; // Округляем до 1 знака
+        longitudinalComponentLabel.textContent = longitudinalComponentSpeed > 0
+            ? `Steady: ${longitudinalComponentSpeed} ${speedUnit.toUpperCase()}`
+            : longitudinalComponent < 0
+            ? `Steady: ${Math.abs(longitudinalComponentSpeed)} ${speedUnit.toUpperCase()}`
+            : "Steady: 0";
 
-        let windAdditive = null;
+        let windAdditive = 0;
         let gustAdditive = 0;
 
         // Если ветер встречный
@@ -546,6 +560,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
         windAdditiveField.value = '+ ' + windAdditive.toFixed(0) + ' KTS';
 
+        let windAdditiveSpeed = 0;
+
+        if (speedUnit === "mps") {
+            windAdditiveSpeed = (longitudinalComponentSpeed / 2) * 1.94;
+        } else {
+            windAdditiveSpeed = longitudinalComponentSpeed / 2;
+        }
+
+        if (windAdditiveSpeed < 7) {
+            windAdditiveSpeed = 7;
+        } else if (windAdditiveSpeed > 15) {
+            windAdditiveSpeed = 15;
+        }
+        windAdditiveLabel.textContent = `Steady: + ${windAdditiveSpeed} KTS`;
+
         // Боковая составляющая
         const lateralComponent = Math.round(calcWind * Math.sin(windAngle) * 10) / 10; // Округляем до 1 знака
         let lateralText = lateralComponent > 0
@@ -553,6 +582,14 @@ document.addEventListener('DOMContentLoaded', () => {
             : lateralComponent < 0
             ? `L ${Math.abs(lateralComponent)} ${speedUnit.toUpperCase()}`
             : "0";
+
+        // Постоянная боковая составляющая
+        let lateralComponentSpeed = Math.round(windSpeed * Math.sin(windAngle) * 10) / 10; // Округляем до 1 знака
+        lateralComponentLabel.textContent = lateralComponentSpeed > 0
+            ? `Steady: ${lateralComponentSpeed} ${speedUnit.toUpperCase()}`
+            : lateralComponent < 0
+            ? `Steady: ${Math.abs(lateralComponentSpeed)} ${speedUnit.toUpperCase()}`
+            : "Steady: 0";
 
         // Устанавливаем значения
         longitudinalComponentField.value = longitudinalText;

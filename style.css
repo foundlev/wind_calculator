@@ -41,8 +41,14 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
     flex-wrap: wrap;
+}
+
+#longitudinal_component_label, #lateral_component_label, #wind_additive_label {
+    margin-top: 5px;
+    opacity: 0.7;
+    font-size: 14px;
 }
 
 .field {
