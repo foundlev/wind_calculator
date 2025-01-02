@@ -41,6 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const ldgLimitField = document.getElementById('ldg_limit');
     const longitudinalComponentField = document.getElementById('longitudinal_component');
     const lateralComponentField = document.getElementById('lateral_component');
+    const windAdditiveField = document.getElementById('wind_additive');
 
     const toLimitLabel = document.getElementById('to_limit_label');
     const ldgLimitLabel = document.getElementById('ldg_limit_label');
@@ -55,6 +56,7 @@ document.addEventListener('DOMContentLoaded', () => {
         'runway_course': 3,
         'wind_direction': 3,
         'wind_speed': 2,
+        'wind_gust': 2,
         'friction_coeff': 2
     };
 
@@ -64,6 +66,7 @@ document.addEventListener('DOMContentLoaded', () => {
         'runway_course': 360,
         'wind_direction': 360,
         'wind_speed': 99,
+        'wind_gust': 99,
         'friction_coeff': 99
     };
 
@@ -125,6 +128,17 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
+    function updateKeyboardButtons() {
+        const keyboardFields = document.querySelectorAll('.keyboard .key-row .key');
+        keyboardFields.forEach((field) => {
+            if (activeField) {
+                field.disabled = false;
+            } else {
+                field.disabled = true;
+            }
+        });
+    }
+
     // Функция для загрузки данных из localStorage
     function loadData() {
         for (const key in inputFields) {
@@ -183,7 +197,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Выделение выбранного поля
     fields.forEach(field => {
         const ignoreIds = ['runway_course', 'longitudinal_component', 'lateral_component',
-                           'to_limit', 'ldg_limit'];
+                           'to_limit', 'ldg_limit', 'wind_additive'];
         if (ignoreIds.includes(field.id)) return;
 
         if (field.tagName.toLowerCase() === 'input') {
@@ -193,6 +207,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
                 activeField = field;
                 field.classList.add('selected');
+                updateKeyboardButtons();
             });
         }
 
@@ -203,6 +218,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
                 activeField = field;
                 field.classList.add('selected');
+                updateKeyboardButtons();
             });
         }
 
@@ -212,6 +228,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 clearCalculations();
                 saveData(field.id, field.value);
             });
+            updateKeyboardButtons();
         }
     });
 
@@ -368,7 +385,8 @@ document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('longitudinal_component'),
             document.getElementById('lateral_component'),
             document.getElementById('to_limit'),
-            document.getElementById('ldg_limit')
+            document.getElementById('ldg_limit'),
+            document.getElementById('wind_additive')
         ];
 
         // Сбрасываем значения и очищаем стили
@@ -390,6 +408,12 @@ document.addEventListener('DOMContentLoaded', () => {
         const coeffMode = document.getElementById('coeff-mode');
         const frictionCoeffField = document.getElementById('friction_coeff');
         const measureTypeField = document.getElementById('measure_type');
+
+        if (activeField) {
+            activeField.classList.remove('selected');
+            activeField = null;
+        }
+        updateKeyboardButtons();
 
         let toFullLimit = null;
         let to80Limit = null;
@@ -474,24 +498,60 @@ document.addEventListener('DOMContentLoaded', () => {
         const runwayCourse = parseFloat(document.getElementById('runway_course').value) || 0; // Курс ВПП в градусах
         const windDirection = parseFloat(document.getElementById('wind_direction').value) || 0; // Направление ветра в градусах
         const windSpeed = parseFloat(document.getElementById('wind_speed').value) || 0; // Скорость ветра
+        const windGust = parseFloat(document.getElementById('wind_gust').value) || 0; // Порывы ветра
+
+        let calcWind = windGust;
+
+        // Если порывы меньше скорости ветра, исправляем их.
+        if (windGust < windSpeed) {
+            document.getElementById('wind_gust').value = '00';
+            localStorage.removeItem('wind_gust');
+            calcWind = windSpeed;
+        }
 
         // Рассчитываем углы
         const windAngle = ((windDirection - runwayCourse + 360) % 360) * (Math.PI / 180); // В радианах
 
         // Продольная составляющая
-        const longitudinalComponent = Math.round(windSpeed * Math.cos(windAngle) * 10) / 10; // Округляем до 1 знака
+        const longitudinalComponent = Math.round(calcWind * Math.cos(windAngle) * 10) / 10; // Округляем до 1 знака
         let longitudinalText = longitudinalComponent > 0
-            ? `HW ${longitudinalComponent} ${speedUnit.toUpperCase()}`
+            ? `H ${longitudinalComponent} ${speedUnit.toUpperCase()}`
             : longitudinalComponent < 0
-            ? `TW ${Math.abs(longitudinalComponent)} ${speedUnit.toUpperCase()}`
+            ? `T ${Math.abs(longitudinalComponent)} ${speedUnit.toUpperCase()}`
             : "0";
 
+        let longitudinalComponentSpeed = Math.round(windSpeed * Math.cos(windAngle) * 10) / 10; // Округляем до 1 знака
+
+        let windAdditive = null;
+        let gustAdditive = 0;
+
+        // Если ветер встречный
+        if (longitudinalComponent >= 0) {
+            if (windGust > windSpeed) {
+                gustAdditive = windGust - windSpeed;
+            }
+        }
+
+        if (speedUnit === "mps") {
+            windAdditive = (longitudinalComponentSpeed / 2 + gustAdditive) * 1.94;
+        } else {
+            windAdditive = longitudinalComponentSpeed / 2 + gustAdditive;
+        }
+
+        if (windAdditive < 7) {
+            windAdditive = 7;
+        } else if (windAdditive > 15) {
+            windAdditive = 15;
+        }
+
+        windAdditiveField.value = '+ ' + windAdditive.toFixed(0) + ' KTS';
+
         // Боковая составляющая
-        const lateralComponent = Math.round(windSpeed * Math.sin(windAngle) * 10) / 10; // Округляем до 1 знака
+        const lateralComponent = Math.round(calcWind * Math.sin(windAngle) * 10) / 10; // Округляем до 1 знака
         let lateralText = lateralComponent > 0
-            ? `(R) ${lateralComponent} ${speedUnit.toUpperCase()}`
+            ? `R ${lateralComponent} ${speedUnit.toUpperCase()}`
             : lateralComponent < 0
-            ? `(L) ${Math.abs(lateralComponent)} ${speedUnit.toUpperCase()}`
+            ? `L ${Math.abs(lateralComponent)} ${speedUnit.toUpperCase()}`
             : "0";
 
         // Устанавливаем значения
@@ -546,7 +606,7 @@ document.addEventListener('DOMContentLoaded', () => {
             longitudinalComponentField.style.color = "white";
         }
 
-        logCalculation(runwayCourse, windDirection, windSpeed, longitudinalComponent, lateralComponent, conditionsDict)
+        logCalculation(runwayCourse, windDirection, windSpeed, windGust, longitudinalComponent, lateralComponent, conditionsDict)
     });
 
     // Загрузка данных при старте
@@ -885,13 +945,14 @@ function addAction(newAction) {
 }
 
 // Функция для логирования нажатия кнопки
-function logCalculation(runwayCourse, windDirection, windSpeed, longitudinalComponent, lateralComponent, conditionsDict) {
+function logCalculation(runwayCourse, windDirection, windSpeed, windGust, longitudinalComponent, lateralComponent, conditionsDict) {
     const newAction = {
         type: 'calculation',
         data: {
             runwayCourse: runwayCourse,
             windDirection: windDirection,
             windSpeed: windSpeed,
+            windGust: windGust,
             longitudinalComponent: longitudinalComponent,
             lateralComponent: lateralComponent,
             conditionsDict: conditionsDict

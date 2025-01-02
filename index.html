@@ -82,6 +82,14 @@
                     </div>
                 </div>
                 <div class="field">
+                    <label for="wind_gust">Порывы ветра</label>
+                    <div class="input-with-buttons">
+                        <button class="minus" data-field="wind_gust">-</button>
+                        <input type="text" id="wind_gust" readonly maxlength="2" value="00">
+                        <button class="plus" data-field="wind_gust">+</button>
+                    </div>
+                </div>
+                <div class="field speed-unit">
                     <label for="speed_unit">Единицы</label>
                     <select id="speed_unit">
                         <option value="MPS" selected>MPS</option>
@@ -101,6 +109,10 @@
                 <div class="field">
                     <label for="lateral_component">Боковая</label>
                     <input type="text" id="lateral_component" readonly value="---">
+                </div>
+                <div class="field">
+                    <label for="lateral_component">Wind Additive</label>
+                    <input type="text" id="wind_additive" readonly value="---">
                 </div>
                 <div class="field">
                     <label for="to_limit" id="to_limit_label">Limit T/O</label>
