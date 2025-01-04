@@ -1081,6 +1081,71 @@ function sendActionsToServer() {
     }
 }
 
+document.addEventListener("DOMContentLoaded", function () {
+    const darkModeMediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+    const html = document.documentElement;
+
+    // Функция для установки темы
+    function setTheme(mode) {
+        if (mode === "dark") {
+            html.setAttribute("dark-theme", "true");
+        } else {
+            html.removeAttribute("dark-theme");
+        }
+    }
+
+    // Применяем тему автоматически
+    function applyAutoTheme() {
+        if (darkModeMediaQuery.matches) {
+            setTheme("dark");
+        } else {
+            setTheme("light");
+        }
+    }
+
+    // Инициализация
+    const button = document.getElementById("theme_button");
+    const icon = button.querySelector("i");
+
+    // Получаем сохранённое состояние из localStorage
+    const savedMode = localStorage.getItem("themeMode") || "auto";
+
+    if (savedMode === "dark") {
+        setTheme("dark");
+        icon.className = "fas fa-moon";
+    } else if (savedMode === "light") {
+        setTheme("light");
+        icon.className = "fas fa-sun";
+    } else {
+        applyAutoTheme();
+        icon.className = "fas fa-adjust";
+    }
+
+    // Обновление темы при изменении системных настроек
+    darkModeMediaQuery.addEventListener("change", () => {
+        if (icon.classList.contains("fa-adjust")) {
+            applyAutoTheme();
+        }
+    });
+
+    // Обработчик переключения темы
+    button.addEventListener("click", () => {
+        if (icon.classList.contains("fa-adjust")) {
+            setTheme("light");
+            icon.className = "fas fa-sun";
+            localStorage.setItem("themeMode", "light");
+        } else if (icon.classList.contains("fa-sun")) {
+            setTheme("dark");
+            icon.className = "fas fa-moon";
+            localStorage.setItem("themeMode", "dark");
+        } else {
+            applyAutoTheme();
+            icon.className = "fas fa-adjust";
+            localStorage.setItem("themeMode", "auto");
+        }
+    });
+});
+
 // Запускаем функцию каждые 5 минут (300,000 миллисекунд)
 setInterval(sendActionsToServer, 300000);
 

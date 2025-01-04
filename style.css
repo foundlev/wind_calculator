@@ -79,7 +79,7 @@ body {
 }
 
 .field input[type="text"],
-.field select, #toggle_button {
+.field select, #toggle_button, #theme_button {
     width: 100%;
     padding: 15px;
     font-size: 20px;
@@ -163,7 +163,7 @@ body {
     background-color: #d0d0d0;
 }
 
-.toggle-button:active {
+.toggle-button:active, .theme-button:active {
     background-color: #bbb;
 }
 
@@ -558,180 +558,188 @@ body {
     opacity: 0;
 }
 
+#toggle_button, #friction_coeff, #wind_gust, #wind_speed, #wind_direction, #runway, #theme_button {
+    cursor: pointer;
+}
+
+
 /* Темная тема */
-@media (prefers-color-scheme: dark) {
-    body {
-        background-color: #222;
-        color: #eee;
-    }
+html[dark-theme] body {
+    background-color: #222;
+    color: #eee;
+}
 
-    .field select {
-        background-image: url('data:image/svg+xml;charset=US-ASCII,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="%23EEE"><path d="M8 10L4 6h8z"/></svg>');
-    }
+html[dark-theme] .field select {
+    background-image: url('data:image/svg+xml;charset=US-ASCII,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="%23EEE"><path d="M8 10L4 6h8z"/></svg>');
+}
 
-    .field input[type="text"],
-    .field select {
-        background-color: #333;
-        border-color: #555;
-        color: #eee;
-    }
+html[dark-theme] .field input[type="text"],
+html[dark-theme] .field select {
+    background-color: #333;
+    border-color: #555;
+    color: #eee;
+}
 
-    #toggle_button, .input-with-buttons .minus, .input-with-buttons .plus {
-        background-color: #333;
-        border-color: #555;
-        color: #eee;
-    }
+html[dark-theme] #toggle_button,
+html[dark-theme] .input-with-buttons .minus,
+html[dark-theme] .input-with-buttons .plus,
+html[dark-theme] #theme_button {
+    background-color: #333;
+    border-color: #555;
+    color: #eee;
+}
 
-    .input-with-buttons .minus,
-    .input-with-buttons .plus {
-        color: #eee;
-    }
+html[dark-theme] .input-with-buttons .minus,
+html[dark-theme] .input-with-buttons .plus {
+    color: #eee;
+}
 
-    .toggle-button {
-        background-color: #444;
-        color: #eee;
-    }
+html[dark-theme] .toggle-button,
+html[dark-theme] .theme-button {
+    background-color: #444;
+    color: #eee;
+}
 
-    .toggle-button:active {
-        background-color: #666;
-    }
+html[dark-theme] .toggle-button:active,
+html[dark-theme] .theme-button:active {
+    background-color: #666;
+}
 
-    .key-row button {
-        background-color: #444;
-        border-color: #666;
-        color: #eee;
-    }
+html[dark-theme] .key-row button {
+    background-color: #444;
+    border-color: #666;
+    color: #eee;
+}
 
-    .key-row button:active,
-    .key-row button.active {
-        background-color: #666;
-    }
+html[dark-theme] .key-row button:active,
+html[dark-theme] .key-row button.active {
+    background-color: #666;
+}
 
-    .calculate-button {
-        background-color: #28a745;
-        color: #fff;
-    }
+html[dark-theme] .calculate-button {
+    background-color: #28a745;
+    color: #fff;
+}
 
-    .calculate-button:active {
-        background-color: #1e7e34;
-    }
+html[dark-theme] .calculate-button:active {
+    background-color: #1e7e34;
+}
 
-    .image-container img[data-condition-visible="true"] {
-        content: url("pics/action_table_dark.png");
-    }
+html[dark-theme] .image-container img[data-condition-visible="true"] {
+    content: url("pics/action_table_dark.png");
+}
 
-    .image-container img[data-condition-visible="false"] {
-        content: url("pics/coeff_table_dark.png");
-    }
+html[dark-theme] .image-container img[data-condition-visible="false"] {
+    content: url("pics/coeff_table_dark.png");
+}
 
-    .reset-button {
-        background-color: rgba(255, 255, 255, 0.5); /* Светлый фон для видимости */
-        color: black; /* Текст черного цвета */
-    }
+html[dark-theme] .reset-button {
+    background-color: rgba(255, 255, 255, 0.5); /* Светлый фон для видимости */
+    color: black; /* Текст черного цвета */
+}
 
-    .arrow-btn {
-        background-color: rgba(255, 255, 255, 0.5); /* Светлый фон для стрелок */
-        color: black; /* Текст черного цвета */
-    }
+html[dark-theme] .arrow-btn {
+    background-color: rgba(255, 255, 255, 0.5); /* Светлый фон для стрелок */
+    color: black; /* Текст черного цвета */
+}
 
-    .arrow-btn:active {
-        background-color: rgba(255, 255, 255, 0.9); /* При нажатии почти белый */
-    }
+html[dark-theme] .arrow-btn:active {
+    background-color: rgba(255, 255, 255, 0.9); /* При нажатии почти белый */
+}
 
-    .block-button {
-        background-color: rgba(255, 255, 255, 0.5);
-        color: black;
-    }
+html[dark-theme] .block-button {
+    background-color: rgba(255, 255, 255, 0.5);
+    color: black;
+}
 
-    .block-button:active {
-        background-color: rgba(255, 255, 255, 0.9);
-    }
+html[dark-theme] .block-button:active {
+    background-color: rgba(255, 255, 255, 0.9);
+}
 
-    .keyboard-buttons .key {
-        background-color: #444;
-        border-color: #666;
-        color: #eee;
-    }
+html[dark-theme] .keyboard-buttons .key {
+    background-color: #444;
+    border-color: #666;
+    color: #eee;
+}
 
-    .keyboard-buttons .key:active {
-        background-color: #666;
-    }
+html[dark-theme] .keyboard-buttons .key:active {
+    background-color: #666;
+}
 
-    .field input[type="text"].level-0,
-    .field select.level-0 {
-        background-color: #218838; /* Темно-зелёный */
-    }
+html[dark-theme] .field input[type="text"].level-0,
+html[dark-theme] .field select.level-0 {
+    background-color: #218838; /* Темно-зелёный */
+}
 
-    .field input[type="text"].level-1,
-    .field select.level-1 {
-        background-color: #e0a800; /* Темно-жёлтый */
-    }
+html[dark-theme] .field input[type="text"].level-1,
+html[dark-theme] .field select.level-1 {
+    background-color: #e0a800; /* Темно-жёлтый */
+}
 
-    .field input[type="text"].level-2,
-    .field select.level-2 {
-        background-color: #e8590c; /* Темно-оранжевый */
-    }
+html[dark-theme] .field input[type="text"].level-2,
+html[dark-theme] .field select.level-2 {
+    background-color: #e8590c; /* Темно-оранжевый */
+}
 
-    .field input[type="text"].level-3,
-    .field select.level-3 {
-        background-color: #c82333; /* Тёмно-красный */
-    }
+html[dark-theme] .field input[type="text"].level-3,
+html[dark-theme] .field select.level-3 {
+    background-color: #c82333; /* Тёмно-красный */
+}
 
-    .help-overlay img {
-        content: url("pics/info_dark.png");
-    }
+html[dark-theme] .help-overlay img {
+    content: url("pics/info_dark.png");
+}
 
-    .close-help {
-        color: white;
-        filter: drop-shadow(0 0 20px black);
-    }
+html[dark-theme] .close-help {
+    color: white;
+    filter: drop-shadow(0 0 20px black);
+}
 
-    .divider {
-        border-bottom: 1px solid #666;
-    }
+html[dark-theme] .divider {
+    border-bottom: 1px solid #666;
+}
 
-    #loading-screen {
-        background-color: rgba(0, 0, 0, 0.9); /* Чёрный фон с прозрачностью */
-    }
+html[dark-theme] #loading-screen {
+    background-color: rgba(0, 0, 0, 0.9); /* Чёрный фон с прозрачностью */
+}
 
-    #loading-screen .loading-content i {
-        color: #eee;
-    }
+html[dark-theme] #loading-screen .loading-content i {
+    color: #eee;
+}
 
-    #loading-screen .loading-content p {
-        color: #eee;
-    }
+html[dark-theme] #loading-screen .loading-content p {
+    color: #eee;
+}
 
-    .modal-content {
-        background-color: #333;
-        color: #eee;
-        border-color: #555;
-    }
+html[dark-theme] .modal-content {
+    background-color: #333;
+    color: #eee;
+    border-color: #555;
+}
 
-    .modal-content code {
-        background-color: #444;
-    }
+html[dark-theme] .modal-content code {
+    background-color: #444;
+}
 
-    .modal-button {
-        background-color: #444;
-        color: white;
-    }
+html[dark-theme] .modal-button {
+    background-color: #444;
+    color: white;
+}
 
-    .modal-button:active {
-        background-color: #666;
-    }
+html[dark-theme] .modal-button:active {
+    background-color: #666;
+}
 
-    .modal-button.update-button {
-        background-color: #0056b3;
-        color: white;
-    }
+html[dark-theme] .modal-button.update-button {
+    background-color: #0056b3;
+    color: white;
+}
 
-    .modal-button.update-button:active {
-        background-color: #003d80;
-    }
+html[dark-theme] .modal-button.update-button:active {
+    background-color: #003d80;
+}
 
-    .offline-warning {
-        background-color: rgba(128, 29, 24, 0.9);
-        color: #fff;
-    }
+html[dark-theme] .offline-warning {
+    background-color: rgba(128, 29, 24, 0.9);
+    color: #fff;
 }
