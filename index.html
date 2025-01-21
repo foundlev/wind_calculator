@@ -104,7 +104,7 @@
         </div>
 
         <!-- Третья секция -->
-        <div class="section">
+        <div class="section" id="component-section">
             <div class="section-row">
                 <div class="field">
                     <label for="longitudinal_component">Продольная</label>
@@ -132,7 +132,7 @@
             </div>
         </div>
         <!-- Четвертая секция -->
-        <div class="section image-section">
+        <div class="section image-section" id="table-showbox">
             <div class="image-container">
                 <img src="pics/action_table_dark.png" alt="Action Table">
                 <div class="arrow-controls">
@@ -163,7 +163,11 @@
                 <button class="key">0</button>
                 <button class="key" id="backspace_key">&#x232B;</button> <!-- [<] символ -->
             </div>
-            <button class="calculate-button" id="calculate_button">Вычислить</button>
+
+            <div class="calc-row">
+                <button class="calculate-button" id="calculate_button"><i class="fa-solid fa-calculator"></i>Вычислить</button>
+                <button class="wind-table-button" id="wind_table_button"><i class="fa-solid fa-wind"></i></button>
+            </div>
         </div>
         <!-- Разделительная черта -->
         <div class="divider"></div>

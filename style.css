@@ -212,7 +212,6 @@ body {
 
 /* Кнопка "Вычислить" */
 .calculate-button {
-    flex: 1;
     margin: 0 5px 0 5px;
     padding: 20px;
     font-size: 20px;
@@ -227,6 +226,24 @@ body {
 
 .calculate-button:active {
     background-color: #1e7e34;
+    transform: scale(0.98);
+}
+
+.wind-table-button {
+    margin: 0 5px 0 5px;
+    padding: 20px;
+    font-size: 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: #0077ff;
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.1s;
+    text-align: center;
+}
+
+.wind-table-button:active {
+    background-color: #004EEE;
     transform: scale(0.98);
 }
 
@@ -625,6 +642,15 @@ html[dark-theme] .calculate-button:active {
     background-color: #1e7e34;
 }
 
+html[dark-theme] .wind-table-button {
+    background-color: #1E6FB7;
+    color: #fff;
+}
+
+html[dark-theme] .wind-table-button:active {
+    background-color: #1446A6;
+}
+
 html[dark-theme] .image-container img[data-condition-visible="true"] {
     content: url("pics/action_table_dark.png");
 }
@@ -742,4 +768,16 @@ html[dark-theme] .modal-button.update-button:active {
 html[dark-theme] .offline-warning {
     background-color: rgba(128, 29, 24, 0.9);
     color: #fff;
+}
+
+#calculate_button i {
+    margin-right: 5px;
+}
+
+.calc-row {
+    display: flex;
+}
+
+#calculate_button {
+    flex: 4;
 }

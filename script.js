@@ -37,6 +37,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const fields = document.querySelectorAll('.field input[type="text"], .field select');
     const keyboardKeys = document.querySelectorAll('.key');
     const calculateButton = document.getElementById('calculate_button');
+    const windTableButton = document.getElementById('wind_table_button');
     const toLimitField = document.getElementById('to_limit');
     const ldgLimitField = document.getElementById('ldg_limit');
     const longitudinalComponentField = document.getElementById('longitudinal_component');
