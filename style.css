@@ -228,6 +228,7 @@ div label {
 
 #coef_field {
     padding-left: 5px;
+    margin-left: 15px;
 }
 
 .key-row button:active,
@@ -976,7 +977,7 @@ html[dark-theme] .wind-angle-item:active {
     border-radius: 5px;
     background-color: #ececec;
     text-align: center;
-    font-size: 1.2em;
+    font-size: 17px;
     transition: background-color 0.3s;
 }
 
@@ -997,8 +998,8 @@ html[dark-theme] .wind-angle-item:active {
 }
 
 .limit-button {
-    padding: 8px 12px;
-    font-size: 20px;
+    padding: 8px 10px;
+    font-size: 18px;
     border: 1px solid #ccc;
     border-radius: 5px;
     background-color: #f0f0f0;
@@ -1026,8 +1027,8 @@ html[dark-theme] .wind-angle-item:active {
 }
 
 .mode-button {
-    padding: 8px 12px;
-    font-size: 20px;
+    padding: 8px 10px;
+    font-size: 18px;
     border: 1px solid #ccc;
     border-radius: 5px;
     background-color: #f0f0f0;
@@ -1102,5 +1103,5 @@ html[dark-theme] .plane-icon .plane-heading {
 }
 
 .simAngle {
-    font-size: 0.8em;
+    font-size: 15px;
 }
