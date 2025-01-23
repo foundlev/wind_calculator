@@ -12,8 +12,10 @@ body {
 
 .container {
     display: flex;
-    height: 100vh;
+    min-height: 100vh; /* или auto */
     width: 100vw;
+    overflow-x: hidden; /* чтобы не было горизонтального скролла */
+    overflow-y: auto;
 }
 
 .left {
@@ -780,4 +782,215 @@ html[dark-theme] .offline-warning {
 
 #calculate_button {
     flex: 4;
+}
+
+.wind-table-result.hidden {
+    display: none;
+}
+
+.section.image-section.hidden {
+    display: none !important;
+}
+
+.section.hidden {
+    display: none !important;
+}
+
+/* Шапка: иконка + курс */
+.wind-table-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.plane-icon i {
+    margin-bottom: 5px;
+    rotate: -90deg;
+}
+
+.left-angles,
+.plane-icon,
+.right-angles {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+
+.wind-angle-item:active {
+    background-color: #e0e0e0;
+}
+
+/* Темная тема, если используется */
+html[dark-theme] .wind-table-result {
+    background-color: #333;
+    color: #eee;
+    border: 1px solid #555;
+}
+
+html[dark-theme] .wind-angle-item {
+    background-color: #444;
+}
+
+html[dark-theme] .wind-angle-item:active {
+    background-color: #555;
+}
+
+.wind-table-result {
+    display: flex; /* Располагаем элементы в строку */
+    flex-direction: row; /* Направление по горизонтали */
+    justify-content: space-between; /* Равномерно распределяем элементы */
+    align-items: center; /* Центрируем элементы по вертикали */
+    gap: 20px; /* Расстояние между колонками */
+    padding: 20px;
+    background-color: #f9f9f9; /* Цвет фона */
+    border: 1px solid #ccc; /* Граница */
+    border-radius: 5px;
+    margin-top: 10px;
+    max-width: 100%; /* Ограничиваем ширину */
+    overflow-x: auto; /* Включаем горизонтальную прокрутку, если необходимо */
+}
+
+/* Скрытие таблицы */
+.wind-table-result.hidden {
+    display: none;
+}
+
+/* Левая и правая колонки */
+.left-angles,
+.right-angles {
+    display: flex; /* Делаем элементы в колонке вертикальными */
+    flex-direction: column;
+    gap: 10px; /* Расстояние между элементами в колонке */
+}
+
+/* Центр – иконка самолёта */
+.plane-icon {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: 4em; /* Размер иконки */
+    color: #0077ff; /* Цвет иконки */
+    gap: 50px;
+}
+
+/* Текст под иконкой */
+.plane-heading {
+    margin-top: 5px;
+    font-size: 0.5em;
+    font-weight: bold;
+    text-align: center;
+    color: #333;
+}
+
+/* Углы ветра */
+.wind-angle-item {
+    padding: 8px 12px;
+    border-radius: 5px;
+    background-color: #ececec;
+    text-align: center;
+    font-size: 1.2em;
+    transition: background-color 0.3s;
+}
+
+/* Hover для углов */
+.wind-angle-item:active {
+    background-color: #dcdcdc;
+}
+
+.limit-buttons {
+    display: flex; /* Располагаем кнопки в строку */
+    justify-content: center; /* Центрируем */
+    gap: 10px; /* Расстояние между кнопками */
+    margin-bottom: 20px; /* Отступ снизу */
+}
+
+.limit-button {
+    padding: 8px 12px;
+    font-size: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f0f0f0;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.limit-button.active {
+    background-color: #0077ff;
+    color: #fff;
+    border-color: #0056b3;
+}
+
+.limit-button:active {
+    background-color: #e0e0e0;
+    border-color: #aaa;
+}
+
+.mode-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 10px; /* Отступ снизу */
+}
+
+.mode-button {
+    padding: 8px 12px;
+    font-size: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f0f0f0;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.mode-button.active {
+    background-color: #28a745; /* Зелёный цвет для активного состояния */
+    color: #fff;
+    border-color: #1e7e34;
+}
+
+.mode-button:active {
+    background-color: #e0e0e0;
+    border-color: #aaa;
+}
+
+html[dark-theme] .limit-button {
+    background-color: #444; /* Темный фон для кнопок */
+    color: #eee; /* Светлый текст */
+    border-color: #555; /* Темная рамка */
+}
+
+html[dark-theme] .limit-button.active {
+    background-color: #1E6FB7; /* Синий для активной кнопки */
+    color: #fff; /* Белый текст */
+    border-color: #1446A6; /* Темно-синий для рамки */
+}
+
+html[dark-theme] .limit-button:active {
+    background-color: #555; /* Чуть светлее для эффекта hover */
+    border-color: #666;
+}
+
+html[dark-theme] .mode-button {
+    background-color: #444; /* Темный фон */
+    color: #eee; /* Светлый текст */
+    border-color: #555; /* Темная рамка */
+}
+
+html[dark-theme] .mode-button.active {
+    background-color: #218838; /* Зеленый для активной кнопки */
+    color: #fff; /* Белый текст */
+    border-color: #1e7e34; /* Темно-зеленый для рамки */
+}
+
+html[dark-theme] .mode-button:active {
+    background-color: #555; /* Светлее для hover */
+    border-color: #666;
+}
+
+html[dark-theme] .plane-icon .plane-icon-info, html[dark-theme] .plane-icon .plane-heading{
+    color: #eee;
+    opacity: 0.9;
 }

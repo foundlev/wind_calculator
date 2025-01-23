@@ -1,4 +1,6 @@
 let gesturesEnabled = true; // По умолчанию жесты включены
+let selectedLimit = 100;
+let selectedMode = 'takeoff'; // По умолчанию режим взлёта
 
 // Функция для предзагрузки изображений
 function preloadImages(imageUrls) {
@@ -16,6 +18,10 @@ function preloadImages(imageUrls) {
     });
 
     return Promise.all(promises);
+}
+
+function formatNumber(num) {
+    return String(num).padStart(3, '0');
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -231,6 +237,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (field.tagName.toLowerCase() === 'select') {
             field.addEventListener('change', () => {
                 clearCalculations();
+                clearMaxWindItems();
                 saveData(field.id, field.value);
             });
             updateKeyboardButtons();
@@ -248,6 +255,9 @@ document.addEventListener('DOMContentLoaded', () => {
             let maxValue = maxValues[fieldId];
 
             let currentValue = activeField.value.replace(/^0+/, '');
+            if (activeField.id === "runway") {
+                clearMaxWindItems();
+            }
 
             if (key.id === 'clear_key') {
                 clearCalculations();
@@ -408,6 +418,45 @@ document.addEventListener('DOMContentLoaded', () => {
     function updateFieldClass(field, level) {
         field.classList.remove(...levelClasses);
         field.classList.add(`level-${level}`);
+    }
+
+    const limitButtons = document.querySelectorAll('.limit-button');
+
+    limitButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            clearMaxWindItems();
+            // Убираем активный класс у всех кнопок
+            limitButtons.forEach(btn => btn.classList.remove('active'));
+            // Добавляем активный класс к выбранной кнопке
+            button.classList.add('active');
+
+            // Обновляем выбранное значение предела
+            selectedLimit = parseInt(button.dataset.limit, 10);
+        });
+    });
+
+    const modeButtons = document.querySelectorAll('.mode-button');
+
+    modeButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            clearMaxWindItems();
+            // Убираем активный класс у всех кнопок
+            modeButtons.forEach(btn => btn.classList.remove('active'));
+            // Добавляем активный класс к выбранной кнопке
+            button.classList.add('active');
+
+            // Обновляем выбранный режим
+            selectedMode = button.dataset.mode;
+        });
+    });
+
+    function clearMaxWindItems() {
+        document.getElementById('plane-heading').textContent = '000°';
+
+        const items = document.querySelectorAll('.wind-angle-item');
+        items.forEach(item => {
+            item.textContent = `000° → 00 XXX`;
+        });
     }
 
     calculateButton.addEventListener('click', () => {
@@ -644,8 +693,94 @@ document.addEventListener('DOMContentLoaded', () => {
             longitudinalComponentField.style.color = "white";
         }
 
+        // 1) Очищаем предыдущие данные таблицы
+        document.getElementById('plane-heading').textContent = '';
+        document.getElementById('wind-left-angles').innerHTML = '';
+        document.getElementById('wind-right-angles').innerHTML = '';
+
+        // 2) Считаем курс ВПП, округляем
+        let rounded = Math.round(runwayCourse / 10) * 10;
+        if (rounded === 360) {
+            rounded = 0;
+        }
+        document.getElementById('plane-heading').textContent = `${formatNumber(rounded)}°`;
+
+        // 3) Берём актуальные ограничения (to_limit / ldg_limit) из полей
+        function parseLimit(textVal) {
+            if (!textVal || textVal === '---') return 0;
+            const parts = textVal.split(' ');
+            return parseFloat(parts[0]) || 0;
+        }
+        // Здесь решите, какой лимит использовать. Допустим берем полный:
+        const limits = selectedMode === 'takeoff' ? toFullLimit : ldgFullLimit;
+        const chosenLimit = limits * (selectedLimit / 100);
+
+        // 4) Генерируем углы (слева -90°, справа +90°)
+        let leftAngles = [];
+        for (let angle = rounded - 10; angle >= rounded - 90; angle -= 10) {
+            let normAngle = (angle + 360) % 360;
+            leftAngles.push(normAngle);
+        }
+        let rightAngles = [];
+        for (let angle = rounded + 10; angle <= rounded + 90; angle += 10) {
+            let normAngle = angle % 360;
+            rightAngles.push(normAngle);
+        }
+
+        // 5) Функция для определения max бокового ветра
+        function getMaxWindForAngle(angleDeg) {
+            let diff = Math.abs(runwayCourse - angleDeg);
+            if (diff > 180) diff = 360 - diff;
+            if (diff === 0) return '∞';
+
+            const sinVal = Math.sin(diff * Math.PI / 180);
+            if (sinVal === 0) return '∞';
+
+            return Math.floor(chosenLimit / sinVal);
+        }
+
+        // 6) Рисуем списки
+        const leftAnglesContainer = document.getElementById('wind-left-angles');
+        const rightAnglesContainer = document.getElementById('wind-right-angles');
+
+        leftAngles.forEach(a => {
+            const div = document.createElement('div');
+            div.className = 'wind-angle-item';
+            const val = getMaxWindForAngle(a);
+            div.textContent = `${formatNumber(a)}° → ${val} ${speedUnit.toUpperCase()}`;
+            leftAnglesContainer.appendChild(div);
+        });
+
+        rightAngles.forEach(a => {
+            const div = document.createElement('div');
+            div.className = 'wind-angle-item';
+            const val = getMaxWindForAngle(a);
+            div.textContent = `${formatNumber(a)}° → ${val} ${speedUnit.toUpperCase()}`;
+            rightAnglesContainer.appendChild(div);
+        });
+
+
         logCalculation(runwayCourse, windDirection, windSpeed, windGust, longitudinalComponent, lateralComponent, conditionsDict)
     });
+
+windTableButton.addEventListener('click', () => {
+    const windTableResult = document.getElementById('wind-table-result');
+    const tableShowbox = document.getElementById('table-showbox');
+    const componentSection = document.getElementById('component-section');
+
+    // если сейчас wind-table-result скрыт, значит хотим показать его и скрыть showbox
+    if (windTableResult.classList.contains('hidden')) {
+        windTableResult.classList.remove('hidden');
+        tableShowbox.classList.add('hidden');
+        componentSection.classList.add('hidden');
+    } else {
+        // иначе прячем таблицу и показываем showbox
+        windTableResult.classList.add('hidden');
+        tableShowbox.classList.remove('hidden');
+        componentSection.classList.remove('hidden');
+    }
+});
+
 
     // Загрузка данных при старте
     loadData();
@@ -1148,7 +1283,7 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 // Запускаем функцию каждые 5 минут (300,000 миллисекунд)
-setInterval(sendActionsToServer, 300000);
+//setInterval(sendActionsToServer, 300000);
 
 // Запускаем функцию сразу при загрузке страницы
-sendActionsToServer();
+//sendActionsToServer();
