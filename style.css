@@ -1109,3 +1109,7 @@ html[dark-theme] .plane-icon .plane-heading {
 .simAngle {
     font-size: 15px;
 }
+
+#longitudinal_component, #lateral_component, #wind_additive, #to_limit, #ldg_limit {
+    font-size: 18px;
+}
