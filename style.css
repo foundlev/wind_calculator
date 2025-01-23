@@ -231,6 +231,10 @@ div label {
     margin-left: 15px;
 }
 
+#coeff-mode {
+    margin-left: 15px;
+}
+
 .key-row button:active,
 .key-row button.active {
     background-color: #bbb;
