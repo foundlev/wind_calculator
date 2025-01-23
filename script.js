@@ -450,6 +450,11 @@ document.addEventListener('DOMContentLoaded', () => {
             const fieldId = button.getAttribute('data-field');
             const input = document.getElementById(fieldId);
             const inputId = input.id;
+
+            if (inputId === 'runway_course') {
+                clearMaxWindItems();
+            }
+
             const maxLength = inputFields[fieldId];
             const maxValue = maxValues[fieldId];
             let currentValue = parseInt(input.value, 10) || 0;
@@ -564,7 +569,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const items = document.querySelectorAll('.wind-angle-item');
         items.forEach(item => {
-            item.textContent = `000° <i class="fa-solid fa-arrow-right"></i> 00 XXX`;
+            item.innerHTML = `000° <i class="fa-solid fa-arrow-right"></i> 00 XXX`;
+            item.innerHTML = `<b>000°</b><span class="simAngle">/000°</span> <i class="fa-solid fa-arrow-right"></i> <b>00</b> XXX`;
         });
     }
 
@@ -848,7 +854,10 @@ document.addEventListener('DOMContentLoaded', () => {
             const sinVal = Math.sin(diff * Math.PI / 180);
             if (sinVal === 0) return '∞';
 
-            return Math.floor(chosenLimit / sinVal);
+            const resultVal = Math.floor(chosenLimit / sinVal)
+            if (resultVal > 99) return 99;
+
+            return resultVal;
         }
 
         function getSymmetricalAngle(angleDeg, mode = 1) {
