@@ -564,7 +564,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const items = document.querySelectorAll('.wind-angle-item');
         items.forEach(item => {
-            item.textContent = `000° → 00 XXX`;
+            item.textContent = `000° <i class="fa-solid fa-arrow-right"></i> 00 XXX`;
         });
     }
 
@@ -877,7 +877,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const div = document.createElement('div');
             div.className = 'wind-angle-item';
             const val = getMaxWindForAngle(a);
-            div.innerHTML = `<b>${formatNumber(a)}°</b><span class="simAngle">/${formatNumber(getSymmetricalAngle(a, 0))}°</span> → <b>${val}</b> ${speedUnit.toUpperCase()}`;
+            div.innerHTML = `<b>${formatNumber(a)}°</b><span class="simAngle">/${formatNumber(getSymmetricalAngle(a, 0))}°</span> <i class="fa-solid fa-arrow-right"></i> <b>${val}</b> ${speedUnit.toUpperCase()}`;
             leftAnglesContainer.appendChild(div);
         });
 
@@ -885,7 +885,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const div = document.createElement('div');
             div.className = 'wind-angle-item';
             const val = getMaxWindForAngle(a);
-            div.innerHTML = `<b>${formatNumber(a)}°</b><span class="simAngle">/${formatNumber(getSymmetricalAngle(a, 1))}°</span> → <b>${val}</b> ${speedUnit.toUpperCase()}`;
+            div.innerHTML = `<b>${formatNumber(a)}°</b><span class="simAngle">/${formatNumber(getSymmetricalAngle(a, 1))}°</span> <i class="fa-solid fa-arrow-right"></i> <b>${val}</b> ${speedUnit.toUpperCase()}`;
             rightAnglesContainer.appendChild(div);
         });
     });
