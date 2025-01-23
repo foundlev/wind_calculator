@@ -84,57 +84,165 @@ document.addEventListener('DOMContentLoaded', () => {
     // Коэффициенты сцепления.
     const reportedBrakingActions = {
         takeoff: {
-            dry: { kts: 34, mps: 17.5 },
-            good: { kts: 25, mps: 12.9 },
-            good_to_medium: { kts: 22, mps: 11.3 },
-            medium: { kts: 20, mps: 10.3 },
-            medium_to_poor: { kts: 15, mps: 7.7 },
-            poor: { kts: 13, mps: 6.7 }
+            dry: {
+                kts: 34,
+                mps: 17.5
+            },
+            good: {
+                kts: 25,
+                mps: 12.9
+            },
+            good_to_medium: {
+                kts: 22,
+                mps: 11.3
+            },
+            medium: {
+                kts: 20,
+                mps: 10.3
+            },
+            medium_to_poor: {
+                kts: 15,
+                mps: 7.7
+            },
+            poor: {
+                kts: 13,
+                mps: 6.7
+            }
         },
         landing: {
-            dry: { kts: 40, mps: 20.6 },
-            good: { kts: 40, mps: 20.6 },
-            good_to_medium: { kts: 35, mps: 18.0 },
-            medium: { kts: 25, mps: 12.9 },
-            medium_to_poor: { kts: 17, mps: 8.7 },
-            poor: { kts: 15, mps: 7.7 }
+            dry: {
+                kts: 40,
+                mps: 20.6
+            },
+            good: {
+                kts: 40,
+                mps: 20.6
+            },
+            good_to_medium: {
+                kts: 35,
+                mps: 18.0
+            },
+            medium: {
+                kts: 25,
+                mps: 12.9
+            },
+            medium_to_poor: {
+                kts: 17,
+                mps: 8.7
+            },
+            poor: {
+                kts: 15,
+                mps: 7.7
+            }
         }
     };
     const coefficientBrakingActions = {
         normative: {
             takeoff: {
-                0.5: { kts: 34, mps: 17.5 },
-                0.42: { kts: 25, mps: 12.9 },
-                0.4: { kts: 22, mps: 11.3 },
-                0.37: { kts: 20, mps: 10.3 },
-                0.35: { kts: 15, mps: 7.7 },
-                0.3: { kts: 13, mps: 6.7 }
+                0.5: {
+                    kts: 34,
+                    mps: 17.5
+                },
+                0.42: {
+                    kts: 25,
+                    mps: 12.9
+                },
+                0.4: {
+                    kts: 22,
+                    mps: 11.3
+                },
+                0.37: {
+                    kts: 20,
+                    mps: 10.3
+                },
+                0.35: {
+                    kts: 15,
+                    mps: 7.7
+                },
+                0.3: {
+                    kts: 13,
+                    mps: 6.7
+                }
             },
             landing: {
-                0.5: { kts: 40, mps: 20.6 },
-                0.42: { kts: 40, mps: 20.6 },
-                0.4: { kts: 35, mps: 18.0 },
-                0.37: { kts: 25, mps: 12.9 },
-                0.35: { kts: 17, mps: 8.7 },
-                0.3: { kts: 15, mps: 7.7 }
+                0.5: {
+                    kts: 40,
+                    mps: 20.6
+                },
+                0.42: {
+                    kts: 40,
+                    mps: 20.6
+                },
+                0.4: {
+                    kts: 35,
+                    mps: 18.0
+                },
+                0.37: {
+                    kts: 25,
+                    mps: 12.9
+                },
+                0.35: {
+                    kts: 17,
+                    mps: 8.7
+                },
+                0.3: {
+                    kts: 15,
+                    mps: 7.7
+                }
             }
         },
         by_sft: {
             takeoff: {
-                0.51: { kts: 34, mps: 17.5 },
-                0.4: { kts: 25, mps: 12.9 },
-                0.36: { kts: 22, mps: 11.3 },
-                0.3: { kts: 20, mps: 10.3 },
-                0.26: { kts: 15, mps: 7.7 },
-                0.17: { kts: 13, mps: 6.7 }
+                0.51: {
+                    kts: 34,
+                    mps: 17.5
+                },
+                0.4: {
+                    kts: 25,
+                    mps: 12.9
+                },
+                0.36: {
+                    kts: 22,
+                    mps: 11.3
+                },
+                0.3: {
+                    kts: 20,
+                    mps: 10.3
+                },
+                0.26: {
+                    kts: 15,
+                    mps: 7.7
+                },
+                0.17: {
+                    kts: 13,
+                    mps: 6.7
+                }
             },
             landing: {
-                0.51: { kts: 40, mps: 20.6 },
-                0.4: { kts: 40, mps: 20.6 },
-                0.36: { kts: 35, mps: 18.0 },
-                0.3: { kts: 25, mps: 12.9 },
-                0.26: { kts: 17, mps: 8.7 },
-                0.17: { kts: 15, mps: 7.7 }
+                0.51: {
+                    kts: 40,
+                    mps: 20.6
+                },
+                0.4: {
+                    kts: 40,
+                    mps: 20.6
+                },
+                0.36: {
+                    kts: 35,
+                    mps: 18.0
+                },
+                0.3: {
+                    kts: 25,
+                    mps: 12.9
+                },
+                0.26: {
+                    kts: 17,
+                    mps: 8.7
+                },
+                0.17: {
+                    kts: 15,
+                    mps: 7.7
+                }
             }
         }
     };
@@ -208,7 +316,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // Выделение выбранного поля
     fields.forEach(field => {
         const ignoreIds = ['runway_course', 'longitudinal_component', 'lateral_component',
-                           'to_limit', 'ldg_limit', 'wind_additive'];
+            'to_limit', 'ldg_limit', 'wind_additive'
+        ];
         if (ignoreIds.includes(field.id)) return;
 
         if (field.tagName.toLowerCase() === 'input') {
@@ -526,7 +635,10 @@ document.addEventListener('DOMContentLoaded', () => {
                         return limits[key];
                     }
                 }
-                return { kts: 0, mps: 0 }; // Если коэффициент меньше минимального
+                return {
+                    kts: 0,
+                    mps: 0
+                }; // Если коэффициент меньше минимального
             };
 
             const takeoffLimit = getLimit(takeoffKeys, frictionCoeff, brakingActions["takeoff"]);
@@ -572,19 +684,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Продольная составляющая
         const longitudinalComponent = Math.round(calcWind * Math.cos(windAngle) * 10) / 10; // Округляем до 1 знака
-        let longitudinalText = longitudinalComponent > 0
-            ? `H ${longitudinalComponent} ${speedUnit.toUpperCase()}`
-            : longitudinalComponent < 0
-            ? `T ${Math.abs(longitudinalComponent)} ${speedUnit.toUpperCase()}`
-            : "0";
+        let longitudinalText = longitudinalComponent > 0 ?
+            `H ${longitudinalComponent} ${speedUnit.toUpperCase()}` :
+            longitudinalComponent < 0 ?
+            `T ${Math.abs(longitudinalComponent)} ${speedUnit.toUpperCase()}` :
+            "0";
 
         // Постоянная продольная составляющая
         let longitudinalComponentSpeed = Math.round(windSpeed * Math.cos(windAngle) * 10) / 10; // Округляем до 1 знака
-        longitudinalComponentLabel.textContent = longitudinalComponentSpeed > 0
-            ? `Steady: ${longitudinalComponentSpeed} ${speedUnit.toUpperCase()}`
-            : longitudinalComponent < 0
-            ? `Steady: ${Math.abs(longitudinalComponentSpeed)} ${speedUnit.toUpperCase()}`
-            : "Steady: 0";
+        longitudinalComponentLabel.textContent = longitudinalComponentSpeed > 0 ?
+            `Steady: ${longitudinalComponentSpeed} ${speedUnit.toUpperCase()}` :
+            longitudinalComponent < 0 ?
+            `Steady: ${Math.abs(longitudinalComponentSpeed)} ${speedUnit.toUpperCase()}` :
+            "Steady: 0";
 
         let windAdditive = 0;
         let gustAdditive = 0;
@@ -627,19 +739,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Боковая составляющая
         const lateralComponent = Math.round(calcWind * Math.sin(windAngle) * 10) / 10; // Округляем до 1 знака
-        let lateralText = lateralComponent > 0
-            ? `R ${lateralComponent} ${speedUnit.toUpperCase()}`
-            : lateralComponent < 0
-            ? `L ${Math.abs(lateralComponent)} ${speedUnit.toUpperCase()}`
-            : "0";
+        let lateralText = lateralComponent > 0 ?
+            `R ${lateralComponent} ${speedUnit.toUpperCase()}` :
+            lateralComponent < 0 ?
+            `L ${Math.abs(lateralComponent)} ${speedUnit.toUpperCase()}` :
+            "0";
 
         // Постоянная боковая составляющая
         let lateralComponentSpeed = Math.round(windSpeed * Math.sin(windAngle) * 10) / 10; // Округляем до 1 знака
-        lateralComponentLabel.textContent = lateralComponentSpeed > 0
-            ? `Steady: ${lateralComponentSpeed} ${speedUnit.toUpperCase()}`
-            : lateralComponent < 0
-            ? `Steady: ${Math.abs(lateralComponentSpeed)} ${speedUnit.toUpperCase()}`
-            : "Steady: 0";
+        lateralComponentLabel.textContent = lateralComponentSpeed > 0 ?
+            `Steady: ${lateralComponentSpeed} ${speedUnit.toUpperCase()}` :
+            lateralComponent < 0 ?
+            `Steady: ${Math.abs(lateralComponentSpeed)} ${speedUnit.toUpperCase()}` :
+            "Steady: 0";
 
         // Устанавливаем значения
         longitudinalComponentField.value = longitudinalText;
@@ -739,6 +851,24 @@ document.addEventListener('DOMContentLoaded', () => {
             return Math.floor(chosenLimit / sinVal);
         }
 
+        function getSymmetricalAngle(angleDeg, mode = 1) {
+            // Центр симметрии
+            let center = null;
+            let symmetricalAngle = null;
+
+            if (mode === 1) {
+                center = rounded + 90; // Симметрия для правой стороны
+                symmetricalAngle = (2 * center - angleDeg + 360) % 360;
+            } else {
+                center = rounded - 90; // Симметрия для левой стороны
+                symmetricalAngle = (2 * center - angleDeg + 360) % 360;
+            }
+
+            symmetricalAngle = symmetricalAngle < 0 ? symmetricalAngle + 360 : symmetricalAngle;
+
+            return symmetricalAngle;
+        }
+
         // 6) Рисуем списки
         const leftAnglesContainer = document.getElementById('wind-left-angles');
         const rightAnglesContainer = document.getElementById('wind-right-angles');
@@ -747,7 +877,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const div = document.createElement('div');
             div.className = 'wind-angle-item';
             const val = getMaxWindForAngle(a);
-            div.textContent = `${formatNumber(a)}° → ${val} ${speedUnit.toUpperCase()}`;
+            div.innerHTML = `<b>${formatNumber(a)}°</b><span class="simAngle">/${formatNumber(getSymmetricalAngle(a, 0))}°</span> → <b>${val}</b> ${speedUnit.toUpperCase()}`;
             leftAnglesContainer.appendChild(div);
         });
 
@@ -755,31 +885,28 @@ document.addEventListener('DOMContentLoaded', () => {
             const div = document.createElement('div');
             div.className = 'wind-angle-item';
             const val = getMaxWindForAngle(a);
-            div.textContent = `${formatNumber(a)}° → ${val} ${speedUnit.toUpperCase()}`;
+            div.innerHTML = `<b>${formatNumber(a)}°</b><span class="simAngle">/${formatNumber(getSymmetricalAngle(a, 1))}°</span> → <b>${val}</b> ${speedUnit.toUpperCase()}`;
             rightAnglesContainer.appendChild(div);
         });
-
-
-        logCalculation(runwayCourse, windDirection, windSpeed, windGust, longitudinalComponent, lateralComponent, conditionsDict)
     });
 
-windTableButton.addEventListener('click', () => {
-    const windTableResult = document.getElementById('wind-table-result');
-    const tableShowbox = document.getElementById('table-showbox');
-    const componentSection = document.getElementById('component-section');
+    windTableButton.addEventListener('click', () => {
+        const windTableResult = document.getElementById('wind-table-result');
+        const tableShowbox = document.getElementById('table-showbox');
+        const componentSection = document.getElementById('component-section');
 
-    // если сейчас wind-table-result скрыт, значит хотим показать его и скрыть showbox
-    if (windTableResult.classList.contains('hidden')) {
-        windTableResult.classList.remove('hidden');
-        tableShowbox.classList.add('hidden');
-        componentSection.classList.add('hidden');
-    } else {
-        // иначе прячем таблицу и показываем showbox
-        windTableResult.classList.add('hidden');
-        tableShowbox.classList.remove('hidden');
-        componentSection.classList.remove('hidden');
-    }
-});
+        // если сейчас wind-table-result скрыт, значит хотим показать его и скрыть showbox
+        if (windTableResult.classList.contains('hidden')) {
+            windTableResult.classList.remove('hidden');
+            tableShowbox.classList.add('hidden');
+            componentSection.classList.add('hidden');
+        } else {
+            // иначе прячем таблицу и показываем showbox
+            windTableResult.classList.add('hidden');
+            tableShowbox.classList.remove('hidden');
+            componentSection.classList.remove('hidden');
+        }
+    });
 
 
     // Загрузка данных при старте
@@ -799,8 +926,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Объект для хранения положений изображений
     let imagePositions = {
-        'image1': { scale: 1, currentX: 0, currentY: 0 },
-        'image2': { scale: 1, currentX: 0, currentY: 0 }
+        'image1': {
+            scale: 1,
+            currentX: 0,
+            currentY: 0
+        },
+        'image2': {
+            scale: 1,
+            currentX: 0,
+            currentY: 0
+        }
     };
 
     let scale = 1;
@@ -848,7 +983,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Функция для обработки touchmove
     imageContainer.addEventListener('touchmove', (event) => {
-        if (!gesturesEnabled) { return }
+        if (!gesturesEnabled) {
+            return
+        }
 
         if (event.touches.length === 2) {
             // Масштабирование двумя пальцами
@@ -892,7 +1029,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Функция для обработки touchstart
     imageContainer.addEventListener('touchstart', (event) => {
-        if (!gesturesEnabled) { return }
+        if (!gesturesEnabled) {
+            return
+        }
 
         if (event.touches.length === 1) {
             // Начало перетаскивания
@@ -907,7 +1046,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Функция для обработки touchend
     imageContainer.addEventListener('touchend', (event) => {
-        if (!gesturesEnabled) { return }
+        if (!gesturesEnabled) {
+            return
+        }
         if (event.touches.length === 0) {
             isDragging = false;
             lastTouchDistance = 0;
@@ -918,7 +1059,11 @@ document.addEventListener('DOMContentLoaded', () => {
     resetButton.addEventListener('click', () => {
         const key = getCurrentImageKey();
         // Сбрасываем положение только для текущей картинки
-        imagePositions[key] = { scale: 1, currentX: 0, currentY: 0 };
+        imagePositions[key] = {
+            scale: 1,
+            currentX: 0,
+            currentY: 0
+        };
         saveImagePositions();
 
         // Применяем сброшенное положение
@@ -985,7 +1130,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Функция для обновления состояния
     const updateGesturesState = () => {
         blockButton.innerHTML = gesturesEnabled ? '<i class="fas fa-unlock-alt"></i>' : '<i class="fas fa-lock"></i>';
-//        imageContainer.style.pointerEvents = gesturesEnabled ? 'auto' : 'none';
+        //        imageContainer.style.pointerEvents = gesturesEnabled ? 'auto' : 'none';
     };
 
     // Событие клика по кнопке
@@ -1196,28 +1341,28 @@ function sendActionsToServer() {
 
             // Отправляем POST-запрос на сервер
             fetch('https://myapihelper.na4u.ru/wind_calc/api.php', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(payload)
-            })
-            .then(response => {
-                if (response.ok) {
-                    // Удаляем ключ 'actions' из localStorage
-                    localStorage.removeItem('actions');
-                } else {
-                    console.error('Ошибка сервера:', response.statusText);
-                }
-            })
-            .catch(error => {
-                console.error('Ошибка отправки данных:', error);
-            });
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(payload)
+                })
+                .then(response => {
+                    if (response.ok) {
+                        // Удаляем ключ 'actions' из localStorage
+                        localStorage.removeItem('actions');
+                    } else {
+                        console.error('Ошибка сервера:', response.statusText);
+                    }
+                })
+                .catch(error => {
+                    console.error('Ошибка отправки данных:', error);
+                });
         }
     }
 }
 
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", function() {
     const darkModeMediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
     const html = document.documentElement;
 

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ru" style="touch-action: manipulation;">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=10.0, user-scalable=no">
@@ -15,263 +16,265 @@
     <link rel="icon" href="icons/icons8-prequel-app-128.png" sizes="128x128" type="image/png">
     <link rel="apple-touch-icon" href="icons/icons8-prequel-app-128.png">
 </head>
+
 <body>
-<div class="container">
-    <div class="left">
-        <!-- Первая секция -->
-        <div class="section">
-            <div class="section-row">
-                <div class="field" id="runway_number">
-                    <label for="runway">ВПП</label>
-                    <input type="text" id="runway" readonly maxlength="2" value="00">
-                </div>
-                <div class="field">
-                    <label for="runway_course">Курс ВПП</label>
-                    <div class="input-with-buttons">
-                        <button class="minus" data-field="runway_course">-</button>
-                        <input type="text" id="runway_course" readonly maxlength="3" value="000">
-                        <button class="plus" data-field="runway_course">+</button>
+    <div class="container">
+        <div class="left">
+            <!-- Первая секция -->
+            <div class="section">
+                <div class="section-row">
+                    <div class="field" id="runway_number">
+                        <label for="runway">ВПП</label>
+                        <input type="text" id="runway" readonly maxlength="2" value="00">
+                    </div>
+                    <div class="field">
+                        <label for="runway_course">Курс ВПП</label>
+                        <div class="input-with-buttons">
+                            <button class="minus" data-field="runway_course">-</button>
+                            <input type="text" id="runway_course" readonly maxlength="3" value="000">
+                            <button class="plus" data-field="runway_course">+</button>
+                        </div>
+                    </div>
+                    <div class="field field-runway-condition" id="coeff-mode">
+                        <label for="runway_condition">Состояние ВПП</label>
+                        <select id="runway_condition">
+                            <option value="DRY">DRY (6)</option>
+                            <option value="GOOD">GOOD (5)</option>
+                            <option value="GOOD_TO_MEDIUM">GOOD TO MEDIUM (4)</option>
+                            <option value="MEDIUM">MEDIUM (3)</option>
+                            <option value="MEDIUM_TO_POOR">MEDIUM TO POOR (2)</option>
+                            <option value="POOR">POOR (1)</option>
+                        </select>
+                    </div>
+                    <div class="field hidden" id="coef_field">
+                        <label for="friction_coeff">Коэф сцепл</label>
+                        <input type="text" id="friction_coeff" readonly maxlength="2" value="00">
+                    </div>
+                    <div class="field hidden" id="measure_type_field">
+                        <label for="measure_type">Тип измерения</label>
+                        <select id="measure_type">
+                            <option value="Normative">Normative</option>
+                            <option value="By_SFT">By SFT</option>
+                        </select>
+                    </div>
+                    <div class="field button-field">
+                        <label for="toggle_button">Перекл</label>
+                        <button class="toggle-button" id="toggle_button"><i class="fa-solid fa-shuffle"></i></button>
+                    </div>
+                    <div class="field button-field">
+                        <label for="theme_button">Тема</label>
+                        <button class="theme-button" id="theme_button"><i class="fas fa-adjust"></i></button>
                     </div>
                 </div>
-                <div class="field field-runway-condition" id="coeff-mode">
-                    <label for="runway_condition">Состояние ВПП</label>
-                    <select id="runway_condition">
-                        <option value="DRY">DRY (6)</option>
-                        <option value="GOOD">GOOD (5)</option>
-                        <option value="GOOD_TO_MEDIUM">GOOD TO MEDIUM (4)</option>
-                        <option value="MEDIUM">MEDIUM (3)</option>
-                        <option value="MEDIUM_TO_POOR">MEDIUM TO POOR (2)</option>
-                        <option value="POOR">POOR (1)</option>
-                    </select>
+            </div>
+
+            <!-- Вторая секция -->
+            <div class="section">
+                <div class="section-row">
+                    <div class="field">
+                        <label for="wind_direction">Направл ветра</label>
+                        <div class="input-with-buttons">
+                            <button class="minus" data-field="wind_direction">-</button>
+                            <input type="text" id="wind_direction" readonly maxlength="3" value="000">
+                            <button class="plus" data-field="wind_direction">+</button>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label for="wind_speed">Скорость ветра</label>
+                        <div class="input-with-buttons">
+                            <button class="minus" data-field="wind_speed">-</button>
+                            <input type="text" id="wind_speed" readonly maxlength="2" value="00">
+                            <button class="plus" data-field="wind_speed">+</button>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label for="wind_gust">Порывы ветра</label>
+                        <div class="input-with-buttons">
+                            <button class="minus" data-field="wind_gust">-</button>
+                            <input type="text" id="wind_gust" readonly maxlength="2" value="00">
+                            <button class="plus" data-field="wind_gust">+</button>
+                        </div>
+                    </div>
+                    <div class="field speed-unit">
+                        <label for="speed_unit">Единицы</label>
+                        <select id="speed_unit">
+                            <option value="MPS" selected>MPS</option>
+                            <option value="KTS">KTS</option>
+                        </select>
+                    </div>
                 </div>
-                <div class="field hidden" id="coef_field">
-                    <label for="friction_coeff">Коэф сцепл</label>
-                    <input type="text" id="friction_coeff" readonly maxlength="2" value="00">
+            </div>
+
+            <!-- Третья секция -->
+            <div class="section" id="component-section">
+                <div class="section-row">
+                    <div class="field">
+                        <label for="longitudinal_component">Продольная</label>
+                        <input type="text" id="longitudinal_component" readonly value="---">
+                        <label for="longitudinal_component" id="longitudinal_component_label">---</label>
+                    </div>
+                    <div class="field">
+                        <label for="lateral_component">Боковая</label>
+                        <input type="text" id="lateral_component" readonly value="---">
+                        <label for="lateral_component" id="lateral_component_label">---</label>
+                    </div>
+                    <div class="field">
+                        <label for="wind_additive">Wind Additive</label>
+                        <input type="text" id="wind_additive" readonly value="---">
+                        <label for="wind_additive" id="wind_additive_label">---</label>
+                    </div>
+                    <div class="field">
+                        <label for="to_limit" id="to_limit_label">Limit T/O</label>
+                        <input type="text" id="to_limit" readonly value="---">
+                    </div>
+                    <div class="field">
+                        <label for="ldg_limit" id="ldg_limit_label">Limit LDG</label>
+                        <input type="text" id="ldg_limit" readonly value="---">
+                    </div>
                 </div>
-                <div class="field hidden" id="measure_type_field">
-                    <label for="measure_type">Тип измерения</label>
-                    <select id="measure_type">
-                        <option value="Normative">Normative</option>
-                        <option value="By_SFT">By SFT</option>
-                    </select>
+            </div>
+            <!-- Четвертая секция -->
+            <div class="section image-section" id="table-showbox">
+                <div class="image-container">
+                    <img src="pics/action_table_dark.png" alt="Action Table">
+                    <div class="arrow-controls">
+                    </div>
                 </div>
-                <div class="field button-field">
-                    <label for="toggle_button">Перекл</label>
-                    <button class="toggle-button" id="toggle_button"><i class="fa-solid fa-shuffle"></i></button>
+            </div>
+
+            <div class="section wind-table-result hidden" id="wind-table-result">
+                <div class="left-angles" id="wind-left-angles">
+                    <div class="wind-angle-item">000° → 00 XXX</div>
+                    <div class="wind-angle-item">000° → 00 XXX</div>
+                    <div class="wind-angle-item">000° → 00 XXX</div>
+                    <div class="wind-angle-item">000° → 00 XXX</div>
+                    <div class="wind-angle-item">000° → 00 XXX</div>
+                    <div class="wind-angle-item">000° → 00 XXX</div>
+                    <div class="wind-angle-item">000° → 00 XXX</div>
+                    <div class="wind-angle-item">000° → 00 XXX</div>
+                    <div class="wind-angle-item">000° → 00 XXX</div>
                 </div>
-                <div class="field button-field">
-                    <label for="theme_button">Тема</label>
-                    <button class="theme-button" id="theme_button"><i class="fas fa-adjust"></i></button>
+
+                <div class="plane-icon">
+                    <!-- Кнопки выбора предела -->
+                    <div class="winds-change-buttons">
+                        <div class="limit-buttons">
+                            <button class="limit-button" data-limit="50">50%</button>
+                            <button class="limit-button" data-limit="80">80%</button>
+                            <button class="limit-button active" data-limit="100">100%</button>
+                        </div>
+                        <!-- Кнопки выбора режима (Take Off / Landing) -->
+                        <div class="mode-buttons">
+                            <button class="mode-button active" data-mode="takeoff">Take Off</button>
+                            <button class="mode-button" data-mode="landing">Landing</button>
+                        </div>
+                    </div>
+                    <div class="plane-icon-info">
+                        <!-- Иконка самолёта -->
+                        <i class="fa-solid fa-plane"></i>
+                        <div class="plane-heading" id="plane-heading">000°</div>
+                    </div>
                 </div>
+
+                <div class="right-angles" id="wind-right-angles">
+                    <div class="wind-angle-item">000° → 00 XXX</div>
+                    <div class="wind-angle-item">000° → 00 XXX</div>
+                    <div class="wind-angle-item">000° → 00 XXX</div>
+                    <div class="wind-angle-item">000° → 00 XXX</div>
+                    <div class="wind-angle-item">000° → 00 XXX</div>
+                    <div class="wind-angle-item">000° → 00 XXX</div>
+                    <div class="wind-angle-item">000° → 00 XXX</div>
+                    <div class="wind-angle-item">000° → 00 XXX</div>
+                    <div class="wind-angle-item">000° → 00 XXX</div>
+                </div>
+            </div>
+
+        </div>
+        <div class="right">
+            <!-- Клавиатура -->
+            <div class="keyboard">
+                <div class="key-row">
+                    <button class="key">1</button>
+                    <button class="key">2</button>
+                    <button class="key">3</button>
+                </div>
+                <div class="key-row">
+                    <button class="key">4</button>
+                    <button class="key">5</button>
+                    <button class="key">6</button>
+                </div>
+                <div class="key-row">
+                    <button class="key">7</button>
+                    <button class="key">8</button>
+                    <button class="key">9</button>
+                </div>
+                <div class="key-row">
+                    <button class="key" id="clear_key"><i class="fa fa-trash"></i></button> <!-- [x] символ -->
+                    <button class="key">0</button>
+                    <button class="key" id="backspace_key">&#x232B;</button> <!-- [<] символ -->
+                </div>
+
+                <div class="calc-row">
+                    <button class="calculate-button" id="calculate_button"><i class="fa-solid fa-calculator"></i>Вычислить</button>
+                    <button class="wind-table-button" id="wind_table_button"><i class="fa-solid fa-wind"></i></button>
+                </div>
+            </div>
+            <!-- Разделительная черта -->
+            <div class="divider"></div>
+            <!-- Новый блок кнопок -->
+            <div class="keyboard-buttons">
+                <div class="key-row">
+                    <button class="key" id="reset_button">Сброс</button>
+                    <button class="key" id="arrow-up"><i class="fas fa-arrow-up"></i></button>
+                </div>
+                <div class="key-row">
+                    <button class="key" id="block_button"><i class="fas fa-unlock-alt"></i></button>
+                    <button class="key" id="arrow-down"><i class="fas fa-arrow-down"></i></button>
+                </div>
+                <div class="key-row last-row">
+                    <button class="key" id="help"><i class="fa fa-book" aria-hidden="true"></i></button>
+                    <button class="key" id="info-version"><i class="fa fa-refresh" aria-hidden="true"></i></i></button>
+                </div>
+            </div>
+            <!-- Разделительная черта -->
+            <div class="divider"></div>
+            <!-- Disclaimer text -->
+            <div class="disclaimer">
+                <i class="fa fa-exclamation-triangle" aria-hidden="true"></i> Данное приложение предназначено исключительно для информационных целей. Оно не является официальным источником и не должно использоваться при принятии решений, связанных с безопасностью полётов. Для получения точной и актуальной информации обращайтесь к официальным документам и инструкциям вашей авиакомпании.
+            </div>
+            <!-- Help Overlay -->
+            <div id="help-overlay" style="display: none;" class="help-overlay">
+                <img src="pics/info.png" alt="Информация">
+                <button id="close-help" class="close-help"><i class="fa fa-times"></i></button>
             </div>
         </div>
-
-        <!-- Вторая секция -->
-        <div class="section">
-            <div class="section-row">
-                <div class="field">
-                    <label for="wind_direction">Направл ветра</label>
-                    <div class="input-with-buttons">
-                        <button class="minus" data-field="wind_direction">-</button>
-                        <input type="text" id="wind_direction" readonly maxlength="3" value="000">
-                        <button class="plus" data-field="wind_direction">+</button>
-                    </div>
-                </div>
-                <div class="field">
-                    <label for="wind_speed">Скорость ветра</label>
-                    <div class="input-with-buttons">
-                        <button class="minus" data-field="wind_speed">-</button>
-                        <input type="text" id="wind_speed" readonly maxlength="2" value="00">
-                        <button class="plus" data-field="wind_speed">+</button>
-                    </div>
-                </div>
-                <div class="field">
-                    <label for="wind_gust">Порывы ветра</label>
-                    <div class="input-with-buttons">
-                        <button class="minus" data-field="wind_gust">-</button>
-                        <input type="text" id="wind_gust" readonly maxlength="2" value="00">
-                        <button class="plus" data-field="wind_gust">+</button>
-                    </div>
-                </div>
-                <div class="field speed-unit">
-                    <label for="speed_unit">Единицы</label>
-                    <select id="speed_unit">
-                        <option value="MPS" selected>MPS</option>
-                        <option value="KTS">KTS</option>
-                    </select>
-                </div>
-            </div>
-        </div>
-
-        <!-- Третья секция -->
-        <div class="section" id="component-section">
-            <div class="section-row">
-                <div class="field">
-                    <label for="longitudinal_component">Продольная</label>
-                    <input type="text" id="longitudinal_component" readonly value="---">
-                    <label for="longitudinal_component" id="longitudinal_component_label">---</label>
-                </div>
-                <div class="field">
-                    <label for="lateral_component">Боковая</label>
-                    <input type="text" id="lateral_component" readonly value="---">
-                    <label for="lateral_component" id="lateral_component_label">---</label>
-                </div>
-                <div class="field">
-                    <label for="wind_additive">Wind Additive</label>
-                    <input type="text" id="wind_additive" readonly value="---">
-                    <label for="wind_additive" id="wind_additive_label">---</label>
-                </div>
-                <div class="field">
-                    <label for="to_limit" id="to_limit_label">Limit T/O</label>
-                    <input type="text" id="to_limit" readonly value="---">
-                </div>
-                <div class="field">
-                    <label for="ldg_limit" id="ldg_limit_label">Limit LDG</label>
-                    <input type="text" id="ldg_limit" readonly value="---">
-                </div>
-            </div>
-        </div>
-        <!-- Четвертая секция -->
-        <div class="section image-section" id="table-showbox">
-            <div class="image-container">
-                <img src="pics/action_table_dark.png" alt="Action Table">
-                <div class="arrow-controls">
-                </div>
-            </div>
-        </div>
-
-        <div class="section wind-table-result hidden" id="wind-table-result">
-            <div class="left-angles" id="wind-left-angles">
-                <div class="wind-angle-item">000° → 00 XXX</div>
-                <div class="wind-angle-item">000° → 00 XXX</div>
-                <div class="wind-angle-item">000° → 00 XXX</div>
-                <div class="wind-angle-item">000° → 00 XXX</div>
-                <div class="wind-angle-item">000° → 00 XXX</div>
-                <div class="wind-angle-item">000° → 00 XXX</div>
-                <div class="wind-angle-item">000° → 00 XXX</div>
-                <div class="wind-angle-item">000° → 00 XXX</div>
-                <div class="wind-angle-item">000° → 00 XXX</div>
-            </div>
-
-            <div class="plane-icon">
-                <!-- Кнопки выбора предела -->
-                <div class="winds-change-buttons">
-                    <div class="limit-buttons">
-                        <button class="limit-button" data-limit="50">50%</button>
-                        <button class="limit-button" data-limit="80">80%</button>
-                        <button class="limit-button active" data-limit="100">100%</button>
-                    </div>
-                    <!-- Кнопки выбора режима (Take Off / Landing) -->
-                    <div class="mode-buttons">
-                        <button class="mode-button active" data-mode="takeoff">Take Off</button>
-                        <button class="mode-button" data-mode="landing">Landing</button>
-                    </div>
-                </div>
-                <div class="plane-icon-info">
-                    <!-- Иконка самолёта -->
-                    <i class="fa-solid fa-plane"></i>
-                    <div class="plane-heading" id="plane-heading">000°</div>
-                </div>
-            </div>
-
-            <div class="right-angles" id="wind-right-angles">
-                <div class="wind-angle-item">000° → 00 XXX</div>
-                <div class="wind-angle-item">000° → 00 XXX</div>
-                <div class="wind-angle-item">000° → 00 XXX</div>
-                <div class="wind-angle-item">000° → 00 XXX</div>
-                <div class="wind-angle-item">000° → 00 XXX</div>
-                <div class="wind-angle-item">000° → 00 XXX</div>
-                <div class="wind-angle-item">000° → 00 XXX</div>
-                <div class="wind-angle-item">000° → 00 XXX</div>
-                <div class="wind-angle-item">000° → 00 XXX</div>
-            </div>
-        </div>
-
     </div>
-    <div class="right">
-        <!-- Клавиатура -->
-        <div class="keyboard">
-            <div class="key-row">
-                <button class="key">1</button>
-                <button class="key">2</button>
-                <button class="key">3</button>
-            </div>
-            <div class="key-row">
-                <button class="key">4</button>
-                <button class="key">5</button>
-                <button class="key">6</button>
-            </div>
-            <div class="key-row">
-                <button class="key">7</button>
-                <button class="key">8</button>
-                <button class="key">9</button>
-            </div>
-            <div class="key-row">
-                <button class="key" id="clear_key"><i class="fa fa-trash"></i></button> <!-- [x] символ -->
-                <button class="key">0</button>
-                <button class="key" id="backspace_key">&#x232B;</button> <!-- [<] символ -->
-            </div>
+    <!-- Loading Screen Overlay -->
+    <div id="loading-screen" style="display: none;">
+        <div class="loading-content">
+            <i class="fas fa-spinner fa-spin"></i>
+            <p>Загрузка...</p>
+        </div>
+    </div>
+    <!-- Version Info Modal -->
+    <div id="version-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <h2>Информация о версии</h2>
+            <p id="version-info">Загрузка информации...</p>
+            <button id="update-modal" class="modal-button update-button">Обновить страницу</button>
+            <button id="close-version-modal" class="modal-button">Закрыть</button>
+        </div>
+    </div>
 
-            <div class="calc-row">
-                <button class="calculate-button" id="calculate_button"><i class="fa-solid fa-calculator"></i>Вычислить</button>
-                <button class="wind-table-button" id="wind_table_button"><i class="fa-solid fa-wind"></i></button>
-            </div>
-        </div>
-        <!-- Разделительная черта -->
-        <div class="divider"></div>
-        <!-- Новый блок кнопок -->
-        <div class="keyboard-buttons">
-            <div class="key-row">
-                <button class="key" id="reset_button">Сброс</button>
-                <button class="key" id="arrow-up"><i class="fas fa-arrow-up"></i></button>
-            </div>
-            <div class="key-row">
-                <button class="key" id="block_button"><i class="fas fa-unlock-alt"></i></button>
-                <button class="key" id="arrow-down"><i class="fas fa-arrow-down"></i></button>
-            </div>
-            <div class="key-row last-row">
-                <button class="key" id="help"><i class="fa fa-book" aria-hidden="true"></i></button>
-                <button class="key" id="info-version"><i class="fa fa-refresh" aria-hidden="true"></i></i></button>
-            </div>
-        </div>
-        <!-- Разделительная черта -->
-        <div class="divider"></div>
-        <!-- Disclaimer text -->
-        <div class="disclaimer">
-            <i class="fa fa-exclamation-triangle" aria-hidden="true"></i> Данное приложение предназначено исключительно для информационных целей. Оно не является официальным источником и не должно использоваться при принятии решений, связанных с безопасностью полётов. Для получения точной и актуальной информации обращайтесь к официальным документам и инструкциям вашей авиакомпании.
-        </div>
-        <!-- Help Overlay -->
-        <div id="help-overlay" style="display: none;" class="help-overlay">
-            <img src="pics/info.png" alt="Информация">
-            <button id="close-help" class="close-help"><i class="fa fa-times"></i></button>
-        </div>
-    </div>
-</div>
-<!-- Loading Screen Overlay -->
-<div id="loading-screen" style="display: none;">
-    <div class="loading-content">
-        <i class="fas fa-spinner fa-spin"></i>
-        <p>Загрузка...</p>
-    </div>
-</div>
-<!-- Version Info Modal -->
-<div id="version-modal" class="modal" style="display: none;">
-    <div class="modal-content">
-        <h2>Информация о версии</h2>
-        <p id="version-info">Загрузка информации...</p>
-        <button id="update-modal" class="modal-button update-button">Обновить страницу</button>
-        <button id="close-version-modal" class="modal-button">Закрыть</button>
-    </div>
-</div>
-
-<script src="script.js"></script>
-<script>
-    if ("serviceWorker" in navigator) {
-      navigator.serviceWorker
-        .register("/service-worker.js")
-        .then(() => console.log("Service Worker зарегистрирован"))
-        .catch(error => console.error("Ошибка регистрации Service Worker:", error));
-    }
-</script>
+    <script src="script.js"></script>
+    <script>
+        if ("serviceWorker" in navigator) {
+            navigator.serviceWorker
+                .register("/service-worker.js")
+                .then(() => console.log("Service Worker зарегистрирован"))
+                .catch(error => console.error("Ошибка регистрации Service Worker:", error));
+        }
+    </script>
 </body>
+
 </html>
