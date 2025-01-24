@@ -566,9 +566,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function clearMaxWindItems() {
         document.getElementById('plane-heading').textContent = '000°';
+        document.getElementById('max-wind-value').innerHTML = '<b>00</b> XXX';
 
         const items = document.querySelectorAll('.wind-angle-item');
         items.forEach(item => {
+            if (item.classList.contains('highlight-angle')) {
+                item.classList.remove('highlight-angle');
+            }
+
             item.innerHTML = `000° <i class="fa-solid fa-arrow-right"></i> 00 XXX`;
             item.innerHTML = `<b>000°</b><span class="simAngle">/000°</span> <i class="fa-solid fa-arrow-right"></i> <b>00</b> XXX`;
         });
@@ -878,15 +883,45 @@ document.addEventListener('DOMContentLoaded', () => {
             return symmetricalAngle;
         }
 
+        function isWithinDegrees(course1, course2, N) {
+            // Нормализуем курсы к диапазону от 0 до 360
+            course1 = course1 % 360;
+            course2 = course2 % 360;
+
+            // Вычисляем разницу между курсами
+            let difference = Math.abs(course1 - course2);
+
+            // Учёт циклической природы курсов
+            difference = Math.min(difference, 360 - difference);
+
+            // Проверяем, попадает ли разница в диапазон
+            return difference <= N;
+        }
+
         // 6) Рисуем списки
         const leftAnglesContainer = document.getElementById('wind-left-angles');
         const rightAnglesContainer = document.getElementById('wind-right-angles');
+        const maxWindItem = document.getElementById('max-wind-value');
+
+        const highlightAngleWithin = 20;
+        let maxWindValue = 99;
 
         leftAngles.forEach(a => {
             const div = document.createElement('div');
             div.className = 'wind-angle-item';
             const val = getMaxWindForAngle(a);
-            div.innerHTML = `<b>${formatNumber(a)}°</b><span class="simAngle">/${formatNumber(getSymmetricalAngle(a, 0))}°</span> <i class="fa-solid fa-arrow-right"></i> <b>${val}</b> ${speedUnit.toUpperCase()}`;
+
+            if (val < maxWindValue) {
+                maxWindValue = val;
+            }
+
+            const symA = getSymmetricalAngle(a, 0)
+            div.innerHTML = `<b>${formatNumber(a)}°</b><span class="simAngle">/${formatNumber(symA)}°</span> <i class="fa-solid fa-arrow-right"></i> <b>${val}</b> ${speedUnit.toUpperCase()}`;
+
+            if (isWithinDegrees(windDirection, a, highlightAngleWithin) || isWithinDegrees(windDirection, symA, highlightAngleWithin)) {
+                div.classList.add('highlight-angle');
+            }
+
             leftAnglesContainer.appendChild(div);
         });
 
@@ -894,9 +929,22 @@ document.addEventListener('DOMContentLoaded', () => {
             const div = document.createElement('div');
             div.className = 'wind-angle-item';
             const val = getMaxWindForAngle(a);
-            div.innerHTML = `<b>${formatNumber(a)}°</b><span class="simAngle">/${formatNumber(getSymmetricalAngle(a, 1))}°</span> <i class="fa-solid fa-arrow-right"></i> <b>${val}</b> ${speedUnit.toUpperCase()}`;
+
+            if (val < maxWindValue) {
+                maxWindValue = val;
+            }
+
+            const symA = getSymmetricalAngle(a, 1);
+            div.innerHTML = `<b>${formatNumber(a)}°</b><span class="simAngle">/${formatNumber(symA)}°</span> <i class="fa-solid fa-arrow-right"></i> <b>${val}</b> ${speedUnit.toUpperCase()}`;
+
+            if (isWithinDegrees(windDirection, a, highlightAngleWithin) || isWithinDegrees(windDirection, symA, highlightAngleWithin)) {
+                div.classList.add('highlight-angle');
+            }
+
             rightAnglesContainer.appendChild(div);
         });
+
+        maxWindItem.innerHTML = `<b>${maxWindValue}</b> ${speedUnit.toUpperCase()}`;
     });
 
     windTableButton.addEventListener('click', () => {

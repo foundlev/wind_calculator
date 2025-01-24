@@ -914,6 +914,15 @@ html[dark-theme] .wind-angle-item:active {
     background-color: #555;
 }
 
+html[dark-theme] .max-wind-item {
+    color: #eee;
+    background-color: #444;
+}
+
+html[dark-theme] .max-wind-item:active {
+    background-color: #555;
+}
+
 .wind-table-result {
     display: flex;
     /* Располагаем элементы в строку */
@@ -987,6 +996,22 @@ html[dark-theme] .wind-angle-item:active {
 
 /* Hover для углов */
 .wind-angle-item:active {
+    background-color: #dcdcdc;
+}
+
+/* Углы ветра */
+.max-wind-item {
+    padding: 8px 12px;
+    border-radius: 5px;
+    background-color: #ececec;
+    text-align: center;
+    font-size: 22px;
+    transition: background-color 0.3s;
+    color: #333;
+}
+
+/* Hover для углов */
+.max-wind-item:active {
     background-color: #dcdcdc;
 }
 
@@ -1112,4 +1137,13 @@ html[dark-theme] .plane-icon .plane-heading {
 
 #longitudinal_component, #lateral_component, #wind_additive, #to_limit, #ldg_limit {
     font-size: 18px;
+}
+
+.highlight-angle {
+    border: 1.5px solid black;
+}
+
+.max-wind-item i {
+    rotate: 0deg;
+    margin-right: 5px;
 }
