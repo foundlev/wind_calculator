@@ -1140,7 +1140,13 @@ html[dark-theme] .plane-icon .plane-heading {
 }
 
 .highlight-angle {
-    border: 1.5px solid black;
+    border: 2.5px solid black;
+    font-weight: bold;
+}
+
+html[dark-theme] .highlight-angle {
+    border: 2.5px solid white;
+    font-weight: bold;
 }
 
 .max-wind-item i {
